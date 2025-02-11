@@ -10,6 +10,7 @@ requires-python = ">=3.11"
 dependencies = [
     "instructor>=1.7.2",
     "joblib>=1.4.2",
+    "line-profiler>=4.2.0",
     "loguru>=0.7.3",
     "openai==1.58.1",
     "pandas>=2.2.3",
