@@ -36,3 +36,20 @@ LANGUAGE_MAP = {
     "da": "Danish",
     "pt": "Portuguese",
 }
+
+COUNTRY_MAP = {
+    "global": "Global",
+    "CA": "Canada",
+    "NIR": "Northern Ireland",
+    "NZ": "New Zealand",
+    "KE": "Kenya",
+    "GB": "Great Britain",
+    "PT": "Portugal",
+    "AU": "Australia",
+    "NL": "Netherlands",
+    "US": "United States",
+    "BR": "Brazil",
+    "NG": "Nigeria",
+    "DK": "Denmark",
+    "SG": "Singapore",
+}
