@@ -5,8 +5,9 @@ Calculates the alignment between the two dataframes
 """
 
 import polars as pl
-from multicultural_alignment.constants import OUTPUT_DIR
 from tqdm import tqdm
+
+from multicultural_alignment.constants import OUTPUT_DIR
 
 EXTRA_COLUMNS = ["cntry_AN", "gwght", "pwght", "lnge_iso"]
 TESTED_LANGUAGES = {"da", "en", "pt", "nl"}
