@@ -1,0 +1,17 @@
+default_stages: [commit]
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.6
+    hooks:
+      - id: ruff
+        args:
+          [
+            "--extend-select",
+            "F401",
+            "--extend-select",
+            "F841",
+            "--fix",
+            "--exit-non-zero-on-fix",
+          ]
+      - id: ruff-format

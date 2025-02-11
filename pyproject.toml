@@ -1,0 +1,41 @@
+[project]
+name = "multicultural-alignment"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "jhrystrom", email = "jhvithamar@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "instructor>=1.7.2",
+    "joblib>=1.4.2",
+    "loguru>=0.7.3",
+    "openai==1.58.1",
+    "pandas>=2.2.3",
+    "polars>=1.22.0",
+    "pyarrow>=19.0.0",
+    "python-dotenv>=1.0.1",
+    "scikit-learn>=1.6.1",
+    "scipy>=1.15.1",
+    "seaborn>=0.13.2",
+    "statsmodels>=0.14.4",
+    "tabulate>=0.9.0",
+    "tiktoken>=0.8.0",
+]
+
+[project.scripts]
+multicultural-alignment = "multicultural_alignment:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+test = [
+    "pytest>=8.3.4",
+    "pytest-asyncio>=0.25.3",
+]
+benchmark = [
+    "scandeval[generative]>=14.0.2",
+]
