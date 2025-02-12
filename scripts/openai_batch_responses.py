@@ -100,7 +100,7 @@ def create_batch(reqs, model_name: str):
 
 
 if __name__ == "__main__":
-    all_prompts = pd.read_csv(OUTPUT_DIR / "translated_prompts_with_english_no_controversy.csv")
+    all_prompts = pd.read_csv(OUTPUT_DIR / "translated_prompts_with_english.csv")
     formatted_df = create_formatted_df(all_prompts)
     all_requests = create_requests_list(formatted_df)
     assert len(all_requests) == len(OPENAI_MODELS), "Number of models does not match number of requests"
