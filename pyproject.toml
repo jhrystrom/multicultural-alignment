@@ -40,3 +40,6 @@ test = [
 benchmark = [
     "scandeval[generative]>=14.0.2",
 ]
+cuda = [
+    "vllm>=0.6.4.post1",
+]

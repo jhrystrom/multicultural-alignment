@@ -11,13 +11,14 @@ pip install -e .
 For a faster experience, we recommend using [uv](https://github.com/astral-sh/uv), which is an extremely fast drop-in replacement for `pip`.
 
 ### VLLM setup
-For running non-API models, we use the `vllm` library. As described in their [docs](https://docs.vllm.ai/en/stable/getting_started/installation.html), they recommend using a fresh conda environment. To install the environment, run the following command: 
+For running non-API models (i.e., `gemma`), we use the `vllm` library. As described in their [docs](https://docs.vllm.ai/en/stable/getting_started/installation.html), they recommend using uv or conda. Since we are already using conda, you can install vllm using uv: 
 
 ```bash
-conda env create -f vllm-environment.yaml
+uv pip install -e '.[cuda]'
 ```
 
-This will create a conda environment named `vllm`. To get responses for the open-source models, you need to activate this environment and run the following command:
+
+This will add `vllm` to the virtual environment. To get responses for the open-source models, you need to activate this environment and run the following command:
 
 ```bash
 python scripts/vllm_batch_responses.py

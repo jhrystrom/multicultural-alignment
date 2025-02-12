@@ -15,9 +15,6 @@ from vllm import LLM, RequestOutput, SamplingParams
 
 DATA_DIR = Path("output")
 MODELS = [
-    "cognitivecomputations/dolphin-2.8-mistral-7b-v02",
-    "mistralai/Mistral-7B-Instruct-v0.2",
-    "Nexusflow/Starling-LM-7B-beta",
     "google/gemma-2-2b-it",
     "google/gemma-2-9b-it",
     "google/gemma-2-27b-it",
