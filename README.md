@@ -1,4 +1,4 @@
-# cross-cultural-controversy
+# multicultural-alignment
 
 
 ## Installation 

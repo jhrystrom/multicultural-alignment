@@ -1,5 +1,5 @@
 """
-Here, we use gpt-3.5-turbo with the batch upload api to translate the different questions to Dutch and Portuguese.
+Here, we use gpt-3.5-turbo with the batch upload api to translate the different questions to Danish, Dutch and Portuguese.
 """
 
 from pathlib import Path
