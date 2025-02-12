@@ -35,4 +35,4 @@ python scripts/vllm_batch_responses.py
 5. [Categorize response](./scripts/batch_analyse_responses.py): Categorizes the responses into pro and con using function calling and gpt-3.5-turbo. 
 6. [Merge results with scores](./scripts/analyze_batch.py): Merges all the results and calculates the pro-score. 
 7. [Analyze hypotheses](./scripts/analyse_hypotheses.py): Finally, this analyses and plots the results. These canbe found in the [`plots`](./plots/) folder. 
-8. Plot and regressions: To get all the plots from the paper, you need to run the following scripts: [WVS plot](./scripts/plot_wvs_data.py), [Multilingual regression](./scripts/plot_multilingual_benchmarks.py), and [US-centric bias](./scripts/plot_us_centric_bias.py).
+8. Plot and regressions: To get all the plots from the paper, you need to run the following scripts: [WVS plot](./scripts/plot_wvs_data.py), [Multilingual regression](./scripts/plot_multilingual_benchmarks.py), and [US-centric bias](./scripts/plot_us_centric_bias.py). Runnign these scripts will also provide print-outs of the regression tables. 
