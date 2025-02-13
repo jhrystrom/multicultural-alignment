@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import polars as pl
 import seaborn as sns
 import statsmodels.formula.api as smf
+from loguru import logger
 from statsmodels.regression.linear_model import RegressionResults
 
 from multicultural_alignment.constants import LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
@@ -111,7 +112,9 @@ def plot_us_centric_bias(plot_data: pl.DataFrame) -> None:
 
 def main():
     sns.set_theme(style="whitegrid", font_scale=1.5)
+    logger.info("Running US-centric bias regression")
     us_results = run_us_regression()
+    logger.info(f"Regression table:\n{us_results.summary()}")
     plot_data = get_confidence_data(get_coefficients(us_results))
     plot_us_centric_bias(plot_data)
 
