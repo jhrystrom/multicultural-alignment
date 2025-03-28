@@ -37,9 +37,7 @@ test = [
     "pytest>=8.3.4",
     "pytest-asyncio>=0.25.3",
 ]
-benchmark = [
-    "scandeval[generative]>=14.0.2",
-]
+benchmark = []
 cuda = [
-    "vllm>=0.6.4.post1",
+    "vllm>0.8",
 ]
