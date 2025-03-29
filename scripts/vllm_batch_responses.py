@@ -18,6 +18,9 @@ MODELS = [
     "google/gemma-2-2b-it",
     "google/gemma-2-9b-it",
     "google/gemma-2-27b-it",
+    "allenai/OLMo-2-1124-7B-Instruct",
+    "allenai/OLMo-2-1124-13B-Instruct",
+    "allenai/OLMo-2-0325-32B-Instruct",
 ]
 DATA_PATH = DATA_DIR / "all-language-requests.jsonl"
 PROMPT_PATH = DATA_DIR / "translated_prompts_with_english_no_controversy.csv"
@@ -73,7 +76,6 @@ def generate_responses(tokenized: list[list[int]], llm: LLM, sampling_params: Sa
 
 
 def cleanup_llm(llm: LLM) -> None:
-    del llm.llm_engine.model_executor
     del llm
     gc.collect()
     torch.cuda.empty_cache()
@@ -88,7 +90,7 @@ def model_generation_pipeline(model_name: str, all_prompts: list[dict], prompt_d
 
     with vllm_attention_backend(model_name):
         logger.info(f"Loading {model_name}...")
-        logger.debug(f"Backend: {os.environ['VLLM_ATTENTION_BACKEND']}")
+        logger.debug(f"Backend: {os.environ.get('VLLM_ATTENTION_BACKEND')}")
         llm = LLM(model=model_name)
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         all_tokenized_prompts = tokenize_all_messages(tokenizer=tokenizer, all_requests=all_prompts)
@@ -120,10 +122,10 @@ def main():
     login()
     prompt_df = pd.read_csv(PROMPT_PATH)
     all_prompts = read_jsonl(DATA_PATH)
-    model_families: dict[str, list[pd.DataFrame]] = {family: [] for family in ["mistral", "gemma"]}
+    model_families: dict[str, list[pd.DataFrame]] = {family: [] for family in ["gemma", "olmo"]}
     for model in tqdm(MODELS, desc="Getting responses for models."):
         output_path = model_generation_pipeline(model_name=model, all_prompts=all_prompts, prompt_df=prompt_df)
-        model_family = "gemma" if "gemma" in model else "mistral"
+        model_family = "gemma" if "gemma" in model else "olmo"
         model_families[model_family].append(pd.read_csv(output_path))
 
     for family, response_dfs in model_families.items():
