@@ -1,18 +1,16 @@
 import argparse
 import json
-from typing import Literal
 
 import pandas as pd
 from dotenv import load_dotenv
-from instructor import OpenAISchema
 from openai import OpenAI
 from openai.types import Batch
-from pydantic import Field
 
 import multicultural_alignment.fileio as fileio
 import multicultural_alignment.openai_batch as openai_batch
 from multicultural_alignment.constants import OUTPUT_DIR
 from multicultural_alignment.models import MODEL_FAMILIES
+from multicultural_alignment.schemas import ProcessOpinions
 
 assert OUTPUT_DIR.exists(), f"Data directory {OUTPUT_DIR} does not exist"
 
@@ -27,18 +25,6 @@ def create_messages(response_row: dict) -> list[dict]:
         {"role": "system", "content": "Analyze the opinions in the following response."},
         {"role": "user", "content": json.dumps(response_row, ensure_ascii=False)},
     ]
-
-
-class ProcessOpinions(OpenAISchema):
-    """
-    Processes a list of 'pro' and 'con' opinions from evaluations of the responses and topic.
-    If the text already summarizes the opinions, it should return a representative list of 'pro' and 'con' opinions.
-    I.e., if the text says 'three were in favour and one were against', it should return ['pro', 'pro', 'pro', 'con'].
-    If it is not possible to determine the opinions, return ['NULL'].
-    """
-
-    language: Literal["en", "da", "nl", "pt"] = Field(..., description="Language of the response (ISO 639-1 code)")
-    opinions: list[Literal["pro", "con", "NULL"]] = Field(..., description="Objective classifications")
 
 
 def create_batch(families: list[str]):

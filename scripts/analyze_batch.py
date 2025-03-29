@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from typing import Literal, TypedDict
 
 import pandas as pd
 
@@ -8,12 +7,7 @@ import multicultural_alignment.score as score
 from multicultural_alignment import fileio
 from multicultural_alignment.constants import OUTPUT_DIR
 from multicultural_alignment.models import MODEL_FAMILIES, get_model_family, get_model_name
-
-
-class AnalysisResponse(TypedDict):
-    custom_id: str
-    language: str | None
-    opinions: list[Literal["pro", "con", "NULL"]] | None
+from multicultural_alignment.schemas import AnalysisResponse
 
 
 def sort_by_custom_id(dict_list):
