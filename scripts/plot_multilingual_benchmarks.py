@@ -132,9 +132,11 @@ def create_plot_data(
     )
 
 
-def run_multilingual_regression(regression_data: pl.DataFrame) -> RegressionResults:
+def run_multilingual_regression(regression_data: pl.DataFrame, regression_formula: str | None = None) -> RegressionResults:
+    if regression_formula is None:
+        regression_formula = "alignment ~ 0 + consistency + multilingual:family:language"
     multilingual_relations = smf.mixedlm(
-        formula="alignment ~ 0 + consistency + multilingual:family:language",
+        formula=regression_formula,
         groups="model_name",
         data=regression_data.to_pandas(),
     )
@@ -145,41 +147,49 @@ def run_multilingual_regression(regression_data: pl.DataFrame) -> RegressionResu
 
 
 def plot_multilingual_coefficients(regression_data: pl.DataFrame) -> pl.DataFrame:
-    regression_results = run_multilingual_regression(regression_data)
-    multilingual_results_df = (
-        extract_results_df(regression_results)
-        .with_columns(
-            pl.col("term").str.extract(family_pattern).alias("family"),
-            pl.col("term").str.extract(language_pattern).alias("language"),
+    formulas = {
+        "normal": "alignment ~ 0 + consistency + multilingual:family:language",
+        "no_consistency": "alignment ~ 0 + multilingual:family:language",
+        "interaction": "alignment ~ 0 + consistency:language + multilingual:family:language",
+    }
+    for name, formula in formulas.items():
+        logger.info(f"Running regression with formula: {formula}")
+        regression_results = run_multilingual_regression(regression_data, regression_formula=formula)
+        multilingual_results_df = (
+            extract_results_df(regression_results)
+            .with_columns(
+                pl.col("term").str.extract(family_pattern).alias("family"),
+                pl.col("term").str.extract(language_pattern).alias("language"),
+            )
+            .drop_nulls()
         )
-        .drop_nulls()
-    )
-    assert "language" in multilingual_results_df.columns, multilingual_results_df.columns
-    plot_coefficients_lower = multilingual_results_df.select(
-        ["language", "family", pl.col("conf_int_lower").alias("coefficient")]
-    )
-    plot_coefficients_upper = multilingual_results_df.select(
-        ["language", "family", pl.col("conf_int_upper").alias("coefficient")]
-    )
-    plot_coefficients_combined = pl.concat(
-        [
-            plot_coefficients_lower,
-            plot_coefficients_upper,
-            multilingual_results_df.select(["language", "family", "coefficient"]),
-        ]
-    ).with_columns(pl.col("language").replace(LANGUAGE_MAP))
-    sns.barplot(
-        data=plot_coefficients_combined,
-        x="language",
-        y="coefficient",
-        hue="family",
-        palette=get_family_color_dict(),
-        errorbar=("pi", 100),
-    )
-    plt.ylabel("$\\beta_{multilingual}$")
-    plt.xlabel(None)
-    plt.legend(title=None)
-    plt.savefig(PLOT_DIR / "multilingual_coefficients.png", bbox_inches="tight")
+        assert "language" in multilingual_results_df.columns, multilingual_results_df.columns
+        plot_coefficients_lower = multilingual_results_df.select(
+            ["language", "family", pl.col("conf_int_lower").alias("coefficient")]
+        )
+        plot_coefficients_upper = multilingual_results_df.select(
+            ["language", "family", pl.col("conf_int_upper").alias("coefficient")]
+        )
+        plot_coefficients_combined = pl.concat(
+            [
+                plot_coefficients_lower,
+                plot_coefficients_upper,
+                multilingual_results_df.select(["language", "family", "coefficient"]),
+            ]
+        ).with_columns(pl.col("language").replace(LANGUAGE_MAP))
+        sns.barplot(
+            data=plot_coefficients_combined,
+            x="language",
+            y="coefficient",
+            hue="family",
+            palette=get_family_color_dict(),
+            errorbar=("pi", 100),
+        )
+        plt.ylabel("$\\beta_{multilingual}$")
+        plt.xlabel(None)
+        plt.legend(title=None)
+        plt.savefig(PLOT_DIR / f"multilingual_coefficients_{name}.png", bbox_inches="tight")
+        plt.close()
     return multilingual_results_df.select("family", "language", "coefficient", "p_value")
 
 

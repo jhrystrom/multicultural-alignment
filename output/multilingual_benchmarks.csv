@@ -1,0 +1,92 @@
+model,benchmark,language,score,family
+GPT-3.5 Turbo,MMLU (5-shot),English,70.0,openai
+GPT-4 Turbo,MMLU (5-shot),English,86.7,openai
+GPT-4o,MMLU (5-shot),English,87.2,openai
+Gemma-2 2B,MMLU (5-shot),English,52.2,gemma
+Gemma-2 9B,MMLU (5-shot),English,71.3,gemma
+Gemma-2 27B,MMLU (5-shot),English,75.2,gemma
+GPT-3.5 Turbo,DROP (3-shot),English,64.1,openai
+GPT-4 Turbo,DROP (3-shot),English,86.0,openai
+GPT-4o,DROP (3-shot),English,83.7,openai
+Gemma-2 2B,DROP (3-shot),English,51.2,gemma
+Gemma-2 9B,DROP (3-shot),English,69.4,gemma
+Gemma-2 27B,DROP (3-shot),English,74.2,gemma
+GPT-3.5 Turbo,GSM-8K (5-shot),English,57.1,openai
+GPT-4 Turbo,GSM-8K (5-shot),English,89.6,openai
+GPT-4o,GSM-8K (5-shot),English,89.9,openai
+Gemma-2 2B,GSM-8K (5-shot),English,24.3,gemma
+Gemma-2 9B,GSM-8K (5-shot),English,68.6,gemma
+Gemma-2 27B,GSM-8K (5-shot),English,74.0,gemma
+GPT-3.5 Turbo,HumanEval (0-shot),English,48.1,openai
+GPT-4 Turbo,HumanEval (0-shot),English,88.2,openai
+GPT-4o,HumanEval (0-shot),English,91.0,openai
+Gemma-2 2B,HumanEval (0-shot),English,20.1,gemma
+Gemma-2 9B,HumanEval (0-shot),English,40.2,gemma
+Gemma-2 27B,HumanEval (0-shot),English,51.8,gemma
+GPT-3.5 Turbo,DANSK,Danish,61.3,openai
+GPT-4o,DANSK,Danish,71.2,openai
+Gemma-2 2B,DANSK,Danish,28.2,gemma
+Gemma-2 9B,DANSK,Danish,57.0,gemma
+Gemma-2 27B,DANSK,Danish,59.9,gemma
+GPT-3.5 Turbo,SCALA-DA,Danish,57.6,openai
+GPT-4o,SCALA-DA,Danish,64.6,openai
+Gemma-2 2B,SCALA-DA,Danish,20.0,gemma
+Gemma-2 9B,SCALA-DA,Danish,51.3,gemma
+Gemma-2 27B,SCALA-DA,Danish,58.6,gemma
+GPT-3.5 Turbo,ScandiQA-DA,Danish,65.5,openai
+GPT-4o,ScandiQA-DA,Danish,67.9,openai
+Gemma-2 2B,ScandiQA-DA,Danish,58.5,gemma
+Gemma-2 9B,ScandiQA-DA,Danish,64.0,gemma
+Gemma-2 27B,ScandiQA-DA,Danish,65.6,gemma
+GPT-3.5 Turbo,Danske Talemaader,Danish,82.0,openai
+GPT-4o,Danske Talemaader,Danish,93.0,openai
+Gemma-2 2B,Danske Talemaader,Danish,11.5,gemma
+Gemma-2 9B,Danske Talemaader,Danish,73.5,gemma
+Gemma-2 27B,Danske Talemaader,Danish,80.2,gemma
+GPT-3.5 Turbo,CoNLL-NL,Dutch,69.0,openai
+GPT-4o,CoNLL-NL,Dutch,76.8,openai
+Gemma-2 2B,CoNLL-NL,Dutch,40.6,gemma
+Gemma-2 9B,CoNLL-NL,Dutch,55.7,gemma
+Gemma-2 27B,CoNLL-NL,Dutch,65.2,gemma
+GPT-3.5 Turbo,SCALA-NL,Dutch,59.0,openai
+GPT-4o,SCALA-NL,Dutch,56.3,openai
+Gemma-2 2B,SCALA-NL,Dutch,19.6,gemma
+Gemma-2 9B,SCALA-NL,Dutch,51.0,gemma
+Gemma-2 27B,SCALA-NL,Dutch,59.0,gemma
+GPT-3.5 Turbo,SQuAD-NL,Dutch,68.3,openai
+GPT-4o,SQuAD-NL,Dutch,79.4,openai
+Gemma-2 2B,SQuAD-NL,Dutch,68.9,gemma
+Gemma-2 9B,SQuAD-NL,Dutch,74.9,gemma
+Gemma-2 27B,SQuAD-NL,Dutch,75.5,gemma
+GPT-3.5 Turbo,MMLU-NL,Dutch,42.3,openai
+GPT-4o,MMLU-NL,Dutch,73.1,openai
+Gemma-2 2B,MMLU-NL,Dutch,29.3,gemma
+Gemma-2 9B,MMLU-NL,Dutch,54.0,gemma
+Gemma-2 27B,MMLU-NL,Dutch,59.7,gemma
+GPT-3.5 Turbo,ENEM,Portuguese,72.2,openai
+Gemma-2 2B,ENEM,Portuguese,41.7,gemma
+Gemma-2 9B,ENEM,Portuguese,64.0,gemma
+Gemma-2 27B,ENEM,Portuguese,70.5,gemma
+GPT-3.5 Turbo,ASSIN2 RTE,Portuguese,88.2,openai
+Gemma-2 2B,ASSIN2 RTE,Portuguese,36.7,gemma
+Gemma-2 9B,ASSIN2 RTE,Portuguese,56.0,gemma
+Gemma-2 27B,ASSIN2 RTE,Portuguese,56.4,gemma
+GPT-3.5 Turbo,FAQUAD NLI,Portuguese,74.6,openai
+Gemma-2 2B,FAQUAD NLI,Portuguese,72.8,gemma
+Gemma-2 9B,FAQUAD NLI,Portuguese,78.2,gemma
+Gemma-2 27B,FAQUAD NLI,Portuguese,78.7,gemma
+gpt-4-turbo,dansk,Danish,68.8,openai
+gpt-4-turbo,conll-nl,Dutch,74.9,openai
+gpt-4-turbo,scala-da,Danish,72.2,openai
+gpt-4-turbo,scala-nl,Dutch,77.3,openai
+gpt-4-turbo,scandiqa-da,Danish,60.0,openai
+gpt-4-turbo,squad-nl,Dutch,61.0,openai
+gpt-4-turbo,danske-talemaader,Danish,94.5,openai
+gpt-4-turbo,mmlu-nl,Dutch,73.6,openai
+GPT-3.5 Turbo,OAB,Portuguese,54.3,openai
+gpt-4-turbo,OAB,Portuguese,73.3,openai
+gpt-4-turbo,FAQUAD NLI,Portuguese,82.8,openai
+gpt-4-turbo,ASSIN2 RTE,Portuguese,94.2,openai
+gpt-4o,FAQUAD NLI,Portuguese,86.5,openai
+gpt-4o,ASSIN2 RTE,Portuguese,94.4,openai
+gpt-4o,OAB,Portuguese,81.0,openai
