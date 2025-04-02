@@ -607,6 +607,17 @@ wheels = [
 ]
 
 [[package]]
+name = "flashinfer-python"
+version = "0.2.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "ninja" },
+    { name = "numpy" },
+    { name = "torch" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a4/e5/8d193ccf65b92c009c4be50fdffa88fa0edc8fd6e6169bacaca6bab84d89/flashinfer_python-0.2.4.tar.gz", hash = "sha256:29fecd7b665dd3da8eb24e328d3aaa6e0923a99e056ba7d968f02eeaf7bc8cc8", size = 1808393 }
+
+[[package]]
 name = "fonttools"
 version = "4.56.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1341,6 +1352,7 @@ name = "multicultural-alignment"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "flashinfer-python" },
     { name = "instructor" },
     { name = "joblib" },
     { name = "line-profiler" },
@@ -1370,6 +1382,7 @@ test = [
 
 [package.metadata]
 requires-dist = [
+    { name = "flashinfer-python", specifier = ">=0.2.4" },
     { name = "instructor", specifier = ">=1.7.2" },
     { name = "joblib", specifier = ">=1.4.2" },
     { name = "line-profiler", specifier = ">=4.2.0" },

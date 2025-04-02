@@ -42,7 +42,7 @@ def vllm_attention_backend(model_name: str):
     """
     original_backend = os.environ.get("VLLM_ATTENTION_BACKEND")
     if model_name.lower().startswith("google/gemma"):
-        os.environ["VLLM_ATTENTION_BACKEND"] = "FLASHINFER"
+        os.environ["VLLM_ATTENTION_BACKEND"] = "FLASH_ATTN"
     try:
         yield
     finally:
@@ -114,8 +114,6 @@ for row, prompt in tqdm(zip(prompt_df.iter_rows(named=True), prompts, strict=Tru
         + DEMOGRAPHIC_DICT[row["language"]]
         + prompt_text[prompt_text.find(".") :]
     )
-    print(f"Original: {prompt_text}")
-    print(f"New: {new_text}")
     new_prompts.append([{"role": "user", "content": new_text}])
 
 prompt_variation_congruent = []
@@ -179,7 +177,7 @@ def model_generation_pipeline(model_name: str, all_prompts: list[dict], prompt_d
         logger.debug(f"Backend: {os.environ.get('VLLM_ATTENTION_BACKEND')}")
         llm = LLM(model=model_name)
         tokenizer = AutoTokenizer.from_pretrained(model_name)
-        all_tokenized_prompts = tokenize_messages(tokenizer=tokenizer, all_requests=all_prompts)
+        all_tokenized_prompts = tokenize_messages(tokenizer=tokenizer, messages=all_prompts)
         assert len(all_tokenized_prompts) == prompt_df.shape[0], "Not matching!"
         outputs = generate_responses(all_tokenized_prompts, llm=llm, sampling_params=SAMPLING_PARAMS)
 
@@ -189,7 +187,7 @@ def model_generation_pipeline(model_name: str, all_prompts: list[dict], prompt_d
         pl.Series("response", outputs),
         pl.lit(model_name).alias("model"),
     )
-    final_df.to_csv(output_path, index=False)
+    final_df.write_csv(output_path)
     logger.info("Clean up LLM")
     cleanup_llm(llm=llm)
     return output_path
@@ -219,7 +217,9 @@ def main():
         model_families[model_family].append(pl.read_csv(output_path))
 
     for family, response_dfs in model_families.items():
-        pl.concat(response_dfs).to_csv(OUTPUT_DIR / f"all_prompts_responses_{family}-combined.csv")
+        if not response_dfs:
+            continue
+        pl.concat(response_dfs).write_csv(OUTPUT_DIR / f"demographic-all_prompts_responses_{family}-combined.csv")
 
 
 if __name__ == "__main__":
