@@ -518,6 +518,18 @@ wheels = [
 ]
 
 [[package]]
+name = "factor-analyzer"
+version = "0.5.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "scikit-learn" },
+    { name = "scipy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/28/19/089a65c4cf7ea407ab001846989b44cf83bc488a6e1fe68e950607251720/factor_analyzer-0.5.1.tar.gz", hash = "sha256:03703cd128ee9f91c9bd191a452b06e4a28296b5a24d11823ebb5d8250e8fdf6", size = 42824 }
+
+[[package]]
 name = "fastapi"
 version = "0.115.8"
 source = { registry = "https://pypi.org/simple" }
@@ -1338,6 +1350,7 @@ dependencies = [
     { name = "polars" },
     { name = "pyarrow" },
     { name = "python-dotenv" },
+    { name = "reliabilipy" },
     { name = "scikit-learn" },
     { name = "scipy" },
     { name = "seaborn" },
@@ -1366,6 +1379,7 @@ requires-dist = [
     { name = "polars", specifier = ">=1.22.0" },
     { name = "pyarrow", specifier = ">=19.0.0" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
+    { name = "reliabilipy", specifier = ">=0.0.36" },
     { name = "scikit-learn", specifier = ">=1.6.1" },
     { name = "scipy", specifier = ">=1.15.1" },
     { name = "seaborn", specifier = ">=0.13.2" },
@@ -2389,6 +2403,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/2b/f1/e40c8373e3480e4f29f2692bd21b3e05f296d3afebc7e5dcf21b9756ca1c/regex-2024.11.6-cp313-cp313-win32.whl", hash = "sha256:63b13cfd72e9601125027202cad74995ab26921d8cd935c25f09c630436348ff", size = 262122 },
     { url = "https://files.pythonhosted.org/packages/45/94/bc295babb3062a731f52621cdc992d123111282e291abaf23faa413443ea/regex-2024.11.6-cp313-cp313-win_amd64.whl", hash = "sha256:2b3361af3198667e99927da8b84c1b010752fa4b1115ee30beaa332cabc3ef1a", size = 273545 },
 ]
+
+[[package]]
+name = "reliabilipy"
+version = "0.0.36"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "factor-analyzer" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9e/3f/80926cfead2892625db6079c3a48a6f0107782c90c46e472ed1db08e11da/reliabiliPy-0.0.36.tar.gz", hash = "sha256:18c8112a620bb8d31f11628db568ba942d71280952787fe2e7eeb9faa7fe31ff", size = 8381 }
 
 [[package]]
 name = "requests"

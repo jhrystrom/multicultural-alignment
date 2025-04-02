@@ -12,7 +12,7 @@ class ProcessOpinions(OpenAISchema):
     If it is not possible to determine the opinions, return ['NULL'].
     """
 
-    language: Literal["en", "da", "nl", "pt"] = Field(..., description="Language of the response (ISO 639-1 code)")
+    language: Literal["en", "da", "nl", "pt", "NULL"] = Field(..., description="Language of the response (ISO 639-1 code)")
     opinions: list[Literal["pro", "con", "NULL"]] = Field(..., description="Objective classifications")
 
 

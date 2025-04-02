@@ -17,6 +17,7 @@ dependencies = [
     "polars>=1.22.0",
     "pyarrow>=19.0.0",
     "python-dotenv>=1.0.1",
+    "reliabilipy>=0.0.36",
     "scikit-learn>=1.6.1",
     "scipy>=1.15.1",
     "seaborn>=0.13.2",

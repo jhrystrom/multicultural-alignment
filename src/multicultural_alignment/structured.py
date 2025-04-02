@@ -5,6 +5,9 @@ from hashlib import sha256
 from pathlib import Path
 from typing import TypedDict
 
+import instructor
+import instructor.exceptions
+from loguru import logger
 from openai import AsyncOpenAI, OpenAI
 from pydantic import BaseModel
 
@@ -27,10 +30,11 @@ class Message(TypedDict):
 def get_default_config(is_async: bool = True, model_name: str = "gpt-4o-mini") -> ModelConfig:
     from dotenv import load_dotenv
 
-    load_dotenv()
+    load_dotenv(override=True)
     return ModelConfig(
         model=model_name,
-        client=AsyncOpenAI() if is_async else OpenAI(),
+        # client=AsyncOpenAI() if is_async else OpenAI(),
+        client=instructor.from_openai(client=AsyncOpenAI() if is_async else OpenAI()),
         temperature=0.0,
     )
 
@@ -54,24 +58,51 @@ async def agenerate_structured(
     model_config: ModelConfig,
     system_message: str | None = None,
     use_cache: bool = True,
+    cache_name: Path | None = None,
 ) -> BaseModel:
     client = model_config.client
     messages_to_send = _create_messages(prompt, system_message)
+
     if use_cache:
-        cache_name = generate_cache_name(messages=messages_to_send, model_name=model_config.model, schema=schema)
-        if cache_name.exists():
-            data = fileio.read_json(cache_name)
+        cache_name = (
+            generate_cache_name(messages=messages_to_send, model_name=model_config.model, schema=schema)
+            if cache_name is None
+            else cache_name
+        )
+        # Use async file I/O operations
+        if await asyncio.to_thread(cache_name.exists):
+            data = await asyncio.to_thread(fileio.read_json, cache_name)
             return schema.model_validate(data)
 
-    response = await client.beta.chat.completions.parse(
-        messages=messages_to_send,
-        response_format=schema,
-        model=model_config.model,
-        temperature=model_config.temperature,
-    )
-    json_response = json.loads(response.choices[0].message.content)
+    try:
+        response = await client.chat.completions.create(
+            messages=messages_to_send,
+            model=model_config.model,
+            temperature=model_config.temperature,
+            response_model=schema,
+        )
+    except instructor.exceptions.InstructorRetryException:
+        logger.warning(f"Error on {messages_to_send}")
+        response = schema(language="NULL", opinions=["NULL"])
+
+    # response = await client.beta.chat.completions.parse(
+    #     messages=messages_to_send,
+    #     response_format=schema,
+    #     model=model_config.model,
+    #     temperature=model_config.temperature,
+    # )
+
+    # if has attribute choices
+    if hasattr(response, "choices"):
+        # Use the first choice
+        json_response = json.loads(response.choices[0].message.content)
+    else:
+        json_response = response.model_dump()
+
     if use_cache:
-        fileio.write_json(data=json_response, output_path=cache_name)
+        # Use async file I/O for writing too
+        await asyncio.to_thread(fileio.write_json, json_response, cache_name)
+
     return schema.model_validate(json_response)
 
 
@@ -87,7 +118,12 @@ async def agenerate_structured_multi(
     # Create a semaphore to limit concurrency
     semaphore = asyncio.Semaphore(concurrency_limit)
 
-    async def limited_generate(prompt: str) -> BaseModel:
+    all_cache_names = [
+        generate_cache_name(messages=_create_messages(prompt, system_message), model_name=model_config.model, schema=schema)
+        for prompt in prompts
+    ]
+
+    async def limited_generate(prompt: str, cache_name: Path) -> BaseModel:
         # Use the semaphore to limit concurrent executions
         async with semaphore:
             return await agenerate_structured(
@@ -95,7 +131,10 @@ async def agenerate_structured_multi(
                 schema=schema,
                 system_message=system_message,
                 model_config=model_config,
+                cache_name=cache_name,
             )
 
-    all_results = await asyncio.gather(*[limited_generate(prompt=prompt) for prompt in prompts])
+    all_results = await asyncio.gather(
+        *[limited_generate(prompt=prompt, cache_name=cache_name) for prompt, cache_name in zip(prompts, all_cache_names)]
+    )
     return all_results
