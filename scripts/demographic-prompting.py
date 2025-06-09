@@ -137,6 +137,7 @@ variation_df = pl.concat([new_df, new_df]).with_columns(
     ),
     pl.Series("is_congruent", [True] * len(prompt_variation_congruent) + [False] * len(prompt_variation_incongruent)),
 )
+variation_df.write_csv(OUTPUT_DIR / "demographic-all_prompts_responses.csv")
 
 
 def tokenize_messages(tokenizer: AutoTokenizer, messages: list[list[Message]]) -> list[list[int]]:

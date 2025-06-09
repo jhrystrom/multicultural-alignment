@@ -43,3 +43,6 @@ benchmark = []
 cuda = [
     "vllm>0.8",
 ]
+notebook = [
+    "ipykernel>=6.29.5",
+]

@@ -265,6 +265,31 @@ def analyze_total_gt_alignment(
     return analysis_results
 
 
+def analyze_demographic(
+    results: pl.DataFrame,
+    ground_truth: pl.DataFrame,
+    metric_func: MetricFunction = "mean_alignment",
+    num_rounds: int = NUM_ROUNDS,
+) -> pd.DataFrame:
+    results_with_gt = (
+        pl.read_csv(OUTPUT_DIR / "demographic-gemma-results.csv")
+        .with_columns(pl.lit("country").alias("gt_group"))
+        .rename({"model": "model_name"})
+    )
+    return pl.concat(
+        [
+            polars_sample_and_calculate(
+                data=results_with_gt,
+                group_cols=["model_name", "gt_group", "response_language", "is_congruent"],
+                x="response_pro_score",
+                y="ground_truth_pro_score",
+                metric_func=metric_func,
+            )
+            for _ in tqdm(range(num_rounds))
+        ]
+    )
+
+
 def analyze_absolute_all_combinations(
     results: pd.DataFrame,
     ground_truth: pd.DataFrame | None,
@@ -727,6 +752,13 @@ def main(
             plot_family_func=None,
             filename="extreme_total_gt_alignment.png",
         ),
+        Analysis(
+            name="Demographic",
+            analysis_func=analyze_demographic,
+            plot_func=None,
+            plot_family_func=None,
+            filename="demographic_analysis.png",
+        ),
     ]
 
     for metric in metrics:
@@ -791,6 +823,7 @@ if __name__ == "__main__":
             "Relative Performance",
             "All Combinations",
             "All Countries",
+            "Demographic",
         ],
     )
     parser.add_argument("--threshold", type=float, default=None, help="Threshold for extreme values")

@@ -1,3 +1,5 @@
+from typing import TypedDict
+
 import matplotlib.pyplot as plt
 import numpy as np
 import polars as pl
@@ -10,6 +12,12 @@ from tqdm import tqdm
 from multicultural_alignment.constants import LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
 from multicultural_alignment.models import add_families_df, get_model_enum
 from multicultural_alignment.plot import get_family_color_dict, get_model_color_dict
+
+
+class RSquared(TypedDict):
+    marginal: float
+    conditional: float
+
 
 MODEL_NAME_MAPPING = {
     # OpenAI models
@@ -32,6 +40,19 @@ family_pattern = r"family\[([^\]]+)\]"
 
 def invert_dict(d: dict) -> dict:
     return {v: k for k, v in d.items()}
+
+
+def calculate_rsquared(model) -> RSquared:
+    fixed_effects_variance = np.var(model.fittedvalues)
+    random_effects_variance = model.cov_re.iloc[0, 0]
+    residual_variance = model.scale
+
+    # Calculate Marginal and Conditional R^2 from theese extracted variances:
+    R2_m = fixed_effects_variance / (fixed_effects_variance + random_effects_variance + residual_variance)
+    R2_c = (fixed_effects_variance + random_effects_variance) / (
+        fixed_effects_variance + random_effects_variance + residual_variance
+    )
+    return RSquared(marginal=R2_m, conditional=R2_c)
 
 
 def extract_results_df(results: RegressionResults) -> pl.DataFrame:
@@ -155,6 +176,8 @@ def plot_multilingual_coefficients(regression_data: pl.DataFrame) -> pl.DataFram
     for name, formula in formulas.items():
         logger.info(f"Running regression with formula: {formula}")
         regression_results = run_multilingual_regression(regression_data, regression_formula=formula)
+        rsquared = calculate_rsquared(regression_results)
+        logger.info(f"R-squared values: {rsquared}")
         multilingual_results_df = (
             extract_results_df(regression_results)
             .with_columns(

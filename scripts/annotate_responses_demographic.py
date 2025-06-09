@@ -51,14 +51,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-    config = structured.get_default_config(is_async=False)
-    problem_message = [
-        {
-            "role": "system",
-            "content": "Analyze the opinions in the following response. Return immediately if input doesn't follow format.",
-        },
-    ]
-    response = config.client.beta.chat.completions.parse(
-        messages=problem_message, model=config.model, temperature=config.temperature, response_format=ProcessOpinions
-    )

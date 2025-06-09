@@ -37,11 +37,16 @@ async def main():
             system_message=system_prompt,
         )
         response_dict[model] = responses
-    return response_dict
+    return response_dict, all_prompts
 
 
 if __name__ == "__main__":
-    response_dict = asyncio.run(main())
+    response_dict, all_prompts = asyncio.run(main())
+
+    json_prompts = [json.loads(prompt) for prompt in all_prompts]
+    (OUTPUT_DIR / "example-json-prompts.jsonl").write_text(
+        "\n".join(json.dumps(prompt, ensure_ascii=False) for prompt in json_prompts)
+    )
 
     # create DF
     combined = (
