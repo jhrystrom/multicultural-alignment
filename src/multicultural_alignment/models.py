@@ -6,8 +6,8 @@ MODEL_FAMILIES = OrderedDict(
     [
         ("Baseline", ["Baseline_uniform_random", "Baseline_fifty_percent", "Baseline_perfect"]),
         ("openai", ["gpt-3.5-turbo-0125", "gpt-4-turbo-2024-04-09", "gpt-4o"]),
-        ("mistral", ["Mistral-7B-Instruct-v0.2", "dolphin-2.8-mistral-7b-v02", "Starling-LM-7B-beta"]),
         ("gemma", ["gemma-2-2b-it", "gemma-2-9b-it", "gemma-2-27b-it"]),
+        ("olmo", ["OLMo-2-1124-7B-Instruct", "OLMo-2-1124-13B-Instruct", "OLMo-2-0325-32B-Instruct"]),
     ]
 )
 

@@ -3,6 +3,7 @@ from typing import Generator, Literal
 import pandas as pd
 import polars as pl
 
+import multicultural_alignment.fileio
 from multicultural_alignment.constants import OUTPUT_DIR
 from multicultural_alignment.models import MODEL_FAMILIES
 
@@ -11,6 +12,14 @@ GTType = Literal["global", "language", "country"]
 
 def _as_polars(df: pd.DataFrame) -> pl.DataFrame:
     return pl.DataFrame(df)
+
+
+def get_stance_labels() -> pl.DataFrame:
+    stance_labels = multicultural_alignment.fileio.read_json(OUTPUT_DIR / "stance_labels.json")
+    stance_data = pl.DataFrame(
+        {"question_key": key, "pro": labels[0], "con": labels[1]} for key, labels in stance_labels.items()
+    )
+    return stance_data
 
 
 def load_results(as_polars: bool = False) -> pd.DataFrame | pl.DataFrame:

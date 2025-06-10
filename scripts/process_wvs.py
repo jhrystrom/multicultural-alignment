@@ -40,6 +40,8 @@ def extract_relevant_columns(usdk_df) -> list:
 if __name__ == "__main__":
     fulldf = pl.scan_csv("data/EVS_WVS_Joint_Csv_v5_0.csv", infer_schema_length=100000)
 
+    sample = fulldf.head(2).collect()
+
     relevant_columns = extract_relevant_columns(fulldf.collect())
 
     max_values = fulldf.select(relevant_columns).max()

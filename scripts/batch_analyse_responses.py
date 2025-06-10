@@ -1,28 +1,29 @@
 import argparse
 import json
 
-import pandas as pd
+import polars as pl
 from dotenv import load_dotenv
 from openai import OpenAI
-from openai.types import Batch
 
+import multicultural_alignment.data
 import multicultural_alignment.fileio as fileio
 import multicultural_alignment.openai_batch as openai_batch
 from multicultural_alignment.constants import OUTPUT_DIR
 from multicultural_alignment.models import MODEL_FAMILIES
 from multicultural_alignment.schemas import ProcessOpinions
+from multicultural_alignment.structured import OPINION_SYSTEM_MSG
 
 assert OUTPUT_DIR.exists(), f"Data directory {OUTPUT_DIR} does not exist"
 
-load_dotenv()
+load_dotenv(override=True)
 
 MODEL_FAMILY_NAMES = list(MODEL_FAMILIES)
 MODEL_FAMILY_NAMES.remove("Baseline")
 
 
-def create_messages(response_row: dict) -> list[dict]:
+def create_messages(response_row: dict, system_msg: str = OPINION_SYSTEM_MSG) -> list[dict]:
     return [
-        {"role": "system", "content": "Analyze the opinions in the following response."},
+        {"role": "system", "content": system_msg},
         {"role": "user", "content": json.dumps(response_row, ensure_ascii=False)},
     ]
 
@@ -39,24 +40,32 @@ def create_batch(families: list[str]):
     )
 
 
-def get_family_data(families: list[str]) -> pd.DataFrame:
+def get_family_data(families: list[str]) -> pl.DataFrame:
     all_data = []
+    column_order = None
     for family in families:
         models = MODEL_FAMILIES[family]
         data_paths = [OUTPUT_DIR / f"all_prompts_responses_{model}.csv" for model in models]
-        family_data = pd.concat(pd.read_csv(data_path) for data_path in data_paths)
+        family_data = pl.concat(pl.read_csv(data_path) for data_path in data_paths)
+        if column_order is None:
+            column_order = family_data.columns
         all_data.append(family_data)
-    combined_data = pd.concat(all_data, ignore_index=True).reset_index(drop=True)
+    combined_data = pl.concat([data.select(column_order) for data in all_data]).select(pl.exclude("index"))
     return combined_data
 
 
 def run_batch(
     client,
-    combined_data: pd.DataFrame,
+    combined_data: pl.DataFrame,
     output_name: str = "all_responses_batch.jsonl",
     additional_metadata: dict | None = None,
 ):
-    responses = combined_data[["response", "topic"]].to_dict(orient="records")
+    stances = multicultural_alignment.data.get_stance_labels()
+    # responses = combined_data[["response", "topic"]].to_dict(orient="records")
+    responses = (
+        combined_data.select(["question_key", "response"]).join(stances, on="question_key").drop("question_key").to_dicts()
+    )
+
     all_messages = [create_messages(response) for response in responses]
     all_requests = openai_batch.create_requests_format(all_messages, tool=ProcessOpinions, id_prefix="analyze-opinions")
 
@@ -85,35 +94,6 @@ def download_batch(model_families: list[str]):
         raise ValueError("Batch is not completed")
     downloaded = openai_batch.download_batch(client, batch=analysis_batch)
     fileio.write_jsonl(downloaded, OUTPUT_DIR / f"{model_families_str}-raw-responses.jsonl")
-
-
-def run_gpt4o_batch():
-    gpt4o_data = pd.read_csv(OUTPUT_DIR / "gpt-4o_responses.csv")
-    client = OpenAI()
-    batch = run_batch(
-        client, combined_data=gpt4o_data, output_name="gpt-4o_responses_batch.jsonl", additional_metadata={"model": "gpt-4o"}
-    )
-    print(batch)
-
-
-def retrieve_gpt4_batch() -> Batch:
-    client = OpenAI()
-    batches = client.batches.list()
-    gpt4_batch = next(
-        batch
-        for batch in batches.data
-        if batch.metadata.get("model") == "gpt-4o" and batch.metadata.get("task") == "analyze"
-    )
-    if not gpt4_batch.status == "completed":
-        raise ValueError("Batch is not completed")
-    return gpt4_batch
-
-
-def download_gpt4o_analysis() -> None:
-    client = OpenAI()
-    batch = retrieve_gpt4_batch()
-    responses = openai_batch.download_batch(client, batch=batch)
-    fileio.write_jsonl(responses, OUTPUT_DIR / "gpt-4o_responses_analysis.jsonl")
 
 
 def main(args: argparse.Namespace):
