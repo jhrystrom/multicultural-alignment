@@ -31,13 +31,18 @@ def create_messages(response_row: dict, system_msg: str = OPINION_SYSTEM_MSG) ->
 def create_batch(families: list[str]):
     combined_data = get_family_data(families=families)
     client = OpenAI()
-    family_str = "_".join(families)
+    family_str = get_family_string(families)
     run_batch(
         client,
         combined_data,
         output_name=f"{family_str}_responses_batch.jsonl",
         additional_metadata={"model_families": family_str},
     )
+
+
+def get_family_string(families: list[str]) -> str:
+    family_str = "_".join(sorted(families))
+    return family_str
 
 
 def get_family_data(families: list[str]) -> pl.DataFrame:
@@ -67,7 +72,9 @@ def run_batch(
     )
 
     all_messages = [create_messages(response) for response in responses]
-    all_requests = openai_batch.create_requests_format(all_messages, tool=ProcessOpinions, id_prefix="analyze-opinions")
+    all_requests = openai_batch.create_requests_format(
+        all_messages, tool=ProcessOpinions, id_prefix="analyze-opinions", model="gpt-4.1"
+    )
 
     metadata = {"description": "Analyze opinions in responses", "task": "analyze"}
     if additional_metadata is not None:
@@ -82,7 +89,7 @@ def run_batch(
 
 
 def download_batch(model_families: list[str]):
-    model_families_str = "_".join(model_families)
+    model_families_str = get_family_string(model_families)
     client = OpenAI()
     batches = client.batches.list()
     analysis_batch = next(
