@@ -53,9 +53,11 @@ def get_family_data(families: list[str]) -> pl.DataFrame:
         data_paths = [OUTPUT_DIR / f"all_prompts_responses_{model}.csv" for model in models]
         family_data = pl.concat(pl.read_csv(data_path) for data_path in data_paths)
         if column_order is None:
-            column_order = family_data.columns
+            column_order = family_data.select(pl.exclude("index")).columns
         all_data.append(family_data)
-    combined_data = pl.concat([data.select(column_order) for data in all_data]).select(pl.exclude("index"))
+    combined_data = pl.concat([data.select(column_order) for data in all_data]).filter(
+        pl.col("template_type") == "survey_hypothetical"
+    )
     return combined_data
 
 
@@ -98,7 +100,9 @@ def download_batch(model_families: list[str]):
         if (batch.metadata.get("task") == "analyze") and (batch.metadata.get("model_families") == model_families_str)
     )
     if not analysis_batch.status == "completed":
-        raise ValueError("Batch is not completed")
+        raise ValueError(
+            f"Batch is not completed: Status is {analysis_batch.status}. Current progress is: {analysis_batch.request_counts}"  # noqa: E501
+        )
     downloaded = openai_batch.download_batch(client, batch=analysis_batch)
     fileio.write_jsonl(downloaded, OUTPUT_DIR / f"{model_families_str}-raw-responses.jsonl")
 
@@ -131,6 +135,3 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     main(args=args)
-
-    client = OpenAI()
-    download_batch(model_families=["gemma"])
