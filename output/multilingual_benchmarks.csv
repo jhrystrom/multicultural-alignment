@@ -90,3 +90,49 @@ gpt-4-turbo,ASSIN2 RTE,Portuguese,94.2,openai
 gpt-4o,FAQUAD NLI,Portuguese,86.5,openai
 gpt-4o,ASSIN2 RTE,Portuguese,94.4,openai
 gpt-4o,OAB,Portuguese,81.0,openai
+OLMo-2 7B,IFEval,English,75.6,olmo
+OLMo-2 7B,MMLU,English,63.9,olmo
+OLMo-2 7B,DROP,English,58.9,olmo
+OLMo-2 7B,GSM-8K,English,85.2,olmo
+OLMo-2 7B,danske-talemaader,Danish,,olmo
+OLMo-2 7B,scala-da,Danish,,olmo
+OLMo-2 7B,scandiqa-da,Danish,,olmo
+OLMo-2 7B,CoNLL-NL,Dutch,,olmo
+OLMo-2 7B,SCALA-NL,Dutch,,olmo
+OLMo-2 7B,SQuAD-NL,Dutch,,olmo
+OLMo-2 7B,MMLU-NL,Dutch,,olmo
+OLMo-2 7B,FAQUAD NLI,Portuguese,70.6,olmo
+OLMo-2 7B,ASSIN2 RTE,Portuguese,87.1,olmo
+OLMo-2 7B,OAB,Portuguese,39.3,olmo
+OLMo-2 7B,ENEM,Portuguese,55.5,olmo
+OLMo-2 13B,IFEval,English,80.4,olmo
+OLMo-2 13B,MMLU,English,68.6,olmo
+OLMo-2 13B,DROP,English,72.1,olmo
+OLMo-2 13B,GSM-8K,English,87.4,olmo
+OLMo-2 13B,danske-talemaader,Danish,,olmo
+OLMo-2 13B,scala-da,Danish,,olmo
+OLMo-2 13B,scandiqa-da,Danish,,olmo
+OLMo-2 13B,CoNLL-NL,Dutch,,olmo
+OLMo-2 13B,SCALA-NL,Dutch,,olmo
+OLMo-2 13B,SQuAD-NL,Dutch,,olmo
+OLMo-2 13B,MMLU-NL,Dutch,,olmo
+OLMo-2 13B,FAQUAD NLI,Portuguese,,olmo
+OLMo-2 13B,ASSIN2 RTE,Portuguese,,olmo
+OLMo-2 13B,OAB,Portuguese,,olmo
+OLMo-2 13B,ENEM,Portuguese,,olmo
+OLMo-2 32B,IFEval,English,85.6,olmo
+OLMo-2 32B,MMLU,English,77.3,olmo
+OLMo-2 32B,DROP,English,78.0,olmo
+OLMo-2 32B,GSM-8K,English,87.6,olmo
+OLMo-2 32B,DANSK,Danish,57.4,olmo
+OLMo-2 32B,danske-talemaader,Danish,64.0,olmo
+OLMo-2 32B,scala-da,Danish,30.5,olmo
+OLMo-2 32B,scandiqa-da,Danish,23.7,olmo
+OLMo-2 32B,CoNLL-NL,Dutch,,olmo
+OLMo-2 32B,SCALA-NL,Dutch,,olmo
+OLMo-2 32B,SQuAD-NL,Dutch,,olmo
+OLMo-2 32B,MMLU-NL,Dutch,,olmo
+OLMo-2 32B,FAQUAD NLI,Portuguese,,olmo
+OLMo-2 32B,ASSIN2 RTE,Portuguese,,olmo
+OLMo-2 32B,OAB,Portuguese,,olmo
+OLMo-2 32B,ENEM,Portuguese,,olmo

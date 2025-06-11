@@ -26,7 +26,7 @@ AnalysisFunction = Callable[[pd.DataFrame, pd.DataFrame, MetricFunction, int], p
 class Analysis:
     name: str
     analysis_func: AnalysisFunction
-    plot_func: Callable
+    plot_func: Callable | None
     plot_family_func: Callable | None
     filename: str
 
@@ -105,7 +105,7 @@ def calculate_consistency(
     language_column: str = "language",
     pro_column: str = "response_pro_score",
     group_column: str = "model_name",
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     language_responses = example_model.select("language", "question_key", pro_column, group_column).with_row_index("index")
     self_joined_responses = language_responses.join(
         language_responses, on=["question_key", group_column, language_column]

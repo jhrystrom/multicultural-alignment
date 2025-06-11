@@ -30,6 +30,10 @@ MODEL_NAME_MAPPING = {
     "Gemma-2 2B": "gemma-2-2b-it",
     "Gemma-2 9B": "gemma-2-9b-it",
     "Gemma-2 27B": "gemma-2-27b-it",
+    # OLMo models
+    "OLMo-2 7B": "OLMo-2-1124-7B-Instruct",
+    "OLMo-2 13B": "OLMo-2-1124-13B-Instruct",
+    "OLMo-2 32B": "OLMo-2-0325-32B-Instruct",
 }
 
 # Regex

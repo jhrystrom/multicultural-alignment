@@ -32,7 +32,7 @@ python scripts/vllm_batch_responses.py
 2. [Translate prompts](./scripts/translate_prompts.py): Automatically translate the prompts to Danish, Portuguese, and Dutch using `gpt-3.5-turbo`. 
 3. [Get responses from OpenAI](./scripts/openai_batch_responses.py): Generates response from the OpenAI models. Note that I did gpt-4o in a seperate run [here](./scripts/gpt-4o_batch_responses.py). For future runs, they can be done with the same script.
 4. [Get responses from Open Source](./scripts/vllm_batch_responses.py): Same as above but using vLLM for the open source models. Note, that running this requires cuda - see [here](#installation) for installation instructions.
-5. [Categorize response](./scripts/batch_analyse_responses.py): Categorizes the responses into pro and con using function calling and gpt-3.5-turbo. 
+5. [Categorize response](./scripts/batch_analyse_responses.py): Categorizes the responses into pro and con using function calling and gpt-4.1.
 6. [Merge results with scores](./scripts/analyze_batch.py): Merges all the results and calculates the pro-score. 
 7. [Analyze hypotheses](./scripts/analyse_hypotheses.py): Finally, this analyses and plots the results. These canbe found in the [`plots`](./plots/) folder. 
 8. Plot and regressions: To get all the plots from the paper, you need to run the following scripts: [WVS plot](./scripts/plot_wvs_data.py), [Multilingual regression](./scripts/plot_multilingual_benchmarks.py), [US-centric bias](./scripts/plot_us_centric_bias.py), and [Self-consistency](./scripts/plot_consistency.py). Running these scripts will also provide print-outs of the regression tables where relevant. 
