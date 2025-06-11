@@ -29,36 +29,15 @@ def create_messages(response_row: dict, system_msg: str = OPINION_SYSTEM_MSG) ->
 
 
 def create_batch(families: list[str]):
-    combined_data = get_family_data(families=families)
+    combined_data = multicultural_alignment.data.get_family_data(families=families)
     client = OpenAI()
-    family_str = get_family_string(families)
+    family_str = multicultural_alignment.data.get_family_string(families)
     run_batch(
         client,
         combined_data,
         output_name=f"{family_str}_responses_batch.jsonl",
         additional_metadata={"model_families": family_str},
     )
-
-
-def get_family_string(families: list[str]) -> str:
-    family_str = "_".join(sorted(families))
-    return family_str
-
-
-def get_family_data(families: list[str]) -> pl.DataFrame:
-    all_data = []
-    column_order = None
-    for family in families:
-        models = MODEL_FAMILIES[family]
-        data_paths = [OUTPUT_DIR / f"all_prompts_responses_{model}.csv" for model in models]
-        family_data = pl.concat(pl.read_csv(data_path) for data_path in data_paths)
-        if column_order is None:
-            column_order = family_data.select(pl.exclude("index")).columns
-        all_data.append(family_data)
-    combined_data = pl.concat([data.select(column_order) for data in all_data]).filter(
-        pl.col("template_type") == "survey_hypothetical"
-    )
-    return combined_data
 
 
 def run_batch(
@@ -91,7 +70,7 @@ def run_batch(
 
 
 def download_batch(model_families: list[str]):
-    model_families_str = get_family_string(model_families)
+    model_families_str = multicultural_alignment.data.get_family_string(model_families)
     client = OpenAI()
     batches = client.batches.list()
     analysis_batch = next(

@@ -6,6 +6,7 @@ import pandas as pd
 import multicultural_alignment.score as score
 from multicultural_alignment import fileio
 from multicultural_alignment.constants import OUTPUT_DIR
+from multicultural_alignment.data import get_family_data, get_family_string
 from multicultural_alignment.models import MODEL_FAMILIES, get_model_family, get_model_name
 from multicultural_alignment.schemas import AnalysisResponse
 
@@ -79,22 +80,27 @@ def load_model_family(model_family: str, output_dir: Path = OUTPUT_DIR) -> pd.Da
 
 
 def get_data_pipeline():
-    openai_mistral = _load_openai_mistral()
-    openai_mistral_responses = fileio.read_jsonl(OUTPUT_DIR / "all-languages-raw-responses.jsonl")
-    full_openai_mistral = create_full_truth_df(openai_mistral, openai_mistral_responses)
+    relevant_families = ["olmo", "gemma", "openai"]
+    family_data = get_family_data(families=relevant_families)
+    family_analysis_responses = fileio.read_jsonl(OUTPUT_DIR / f"{get_family_string(relevant_families)}-raw-responses.jsonl")
+    full_df = create_full_truth_df(family_data.to_pandas(), family_analysis_responses)
 
-    # GPT-4o was done later, so it's not included in openai
-    gpt4o_prompt_responses = pd.read_csv(fileio.find_latest_path("gpt-4o_responses.csv", directory=OUTPUT_DIR))
-    gpt4o_analysis_responses = fileio.read_jsonl(OUTPUT_DIR / "gpt-4o_responses_analysis.jsonl")
-    full_gpt4o = create_full_truth_df(gpt4o_prompt_responses, gpt4o_analysis_responses)
+    # openai_mistral = _load_openai_mistral()
+    # openai_mistral_responses = fileio.read_jsonl(OUTPUT_DIR / "all-languages-raw-responses.jsonl")
+    # full_openai_mistral = create_full_truth_df(openai_mistral, openai_mistral_responses)
 
-    # Gemma responses
-    gemma_prompt_responses = load_model_family("gemma")
-    gemma_analysis_responses = fileio.read_jsonl(OUTPUT_DIR / "gemma-raw-responses.jsonl")
-    full_gemma = create_full_truth_df(gemma_prompt_responses, gemma_analysis_responses)
+    # # GPT-4o was done later, so it's not included in openai
+    # gpt4o_prompt_responses = pd.read_csv(fileio.find_latest_path("gpt-4o_responses.csv", directory=OUTPUT_DIR))
+    # gpt4o_analysis_responses = fileio.read_jsonl(OUTPUT_DIR / "gpt-4o_responses_analysis.jsonl")
+    # full_gpt4o = create_full_truth_df(gpt4o_prompt_responses, gpt4o_analysis_responses)
 
-    full_df = pd.concat([full_openai_mistral, full_gpt4o, full_gemma], ignore_index=True).reset_index(drop=True)
-    assert full_df.loc[0, "model"].startswith("gpt-4-turbo"), "Model name does not start with gpt-4-turbo"
+    # # Gemma responses
+    # gemma_prompt_responses = load_model_family("gemma")
+    # gemma_analysis_responses = fileio.read_jsonl(OUTPUT_DIR / "gemma-raw-responses.jsonl")
+    # full_gemma = create_full_truth_df(gemma_prompt_responses, gemma_analysis_responses)
+
+    # full_df = pd.concat([full_openai_mistral, full_gpt4o, full_gemma], ignore_index=True).reset_index(drop=True)
+    # assert full_df.loc[0, "model"].startswith("gpt-4-turbo"), "Model name does not start with gpt-4-turbo"
     full_df.to_csv("data/lang_model_responses_raw.csv", index=False)
 
     ground_truth = pd.read_csv(OUTPUT_DIR / "ground_truth.csv").rename(columns={"pro_score": "ground_truth_pro_score"})
@@ -103,11 +109,9 @@ def get_data_pipeline():
         .merge(ground_truth, on=["question_key", "language"], how="left")
         .dropna(subset=["response_pro_score", "ground_truth_pro_score", "model", "language"])
     )[(full_df["language"] == full_df["response_language"])]
-    all_results.columns
     all_results = all_results.assign(
         model_family=all_results["model"].apply(get_model_family), model_name=all_results["model"].apply(get_model_name)
     )
-    assert all_results.loc[0, "model_name"].startswith("gpt-4-turbo"), "Model name does not start with gpt-4-turbo"
     all_results["model_name"].unique()
 
     columns_to_save = [
