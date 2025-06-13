@@ -94,13 +94,6 @@ OLMo-2 7B,IFEval,English,75.6,olmo
 OLMo-2 7B,MMLU,English,63.9,olmo
 OLMo-2 7B,DROP,English,58.9,olmo
 OLMo-2 7B,GSM-8K,English,85.2,olmo
-OLMo-2 7B,danske-talemaader,Danish,,olmo
-OLMo-2 7B,scala-da,Danish,,olmo
-OLMo-2 7B,scandiqa-da,Danish,,olmo
-OLMo-2 7B,CoNLL-NL,Dutch,,olmo
-OLMo-2 7B,SCALA-NL,Dutch,,olmo
-OLMo-2 7B,SQuAD-NL,Dutch,,olmo
-OLMo-2 7B,MMLU-NL,Dutch,,olmo
 OLMo-2 7B,FAQUAD NLI,Portuguese,70.6,olmo
 OLMo-2 7B,ASSIN2 RTE,Portuguese,87.1,olmo
 OLMo-2 7B,OAB,Portuguese,39.3,olmo
@@ -109,17 +102,10 @@ OLMo-2 13B,IFEval,English,80.4,olmo
 OLMo-2 13B,MMLU,English,68.6,olmo
 OLMo-2 13B,DROP,English,72.1,olmo
 OLMo-2 13B,GSM-8K,English,87.4,olmo
-OLMo-2 13B,danske-talemaader,Danish,,olmo
-OLMo-2 13B,scala-da,Danish,,olmo
-OLMo-2 13B,scandiqa-da,Danish,,olmo
-OLMo-2 13B,CoNLL-NL,Dutch,,olmo
-OLMo-2 13B,SCALA-NL,Dutch,,olmo
-OLMo-2 13B,SQuAD-NL,Dutch,,olmo
-OLMo-2 13B,MMLU-NL,Dutch,,olmo
-OLMo-2 13B,FAQUAD NLI,Portuguese,,olmo
-OLMo-2 13B,ASSIN2 RTE,Portuguese,,olmo
-OLMo-2 13B,OAB,Portuguese,,olmo
-OLMo-2 13B,ENEM,Portuguese,,olmo
+OLMo-2 13B,FAQUAD NLI,Portuguese,79.5,olmo
+OLMo-2 13B,ASSIN2 RTE,Portuguese,90.9,olmo
+OLMo-2 13B,OAB,Portuguese,41.0,olmo
+OLMo-2 13B,ENEM,Portuguese,59.2,olmo
 OLMo-2 32B,IFEval,English,85.6,olmo
 OLMo-2 32B,MMLU,English,77.3,olmo
 OLMo-2 32B,DROP,English,78.0,olmo
@@ -132,7 +118,23 @@ OLMo-2 32B,CoNLL-NL,Dutch,,olmo
 OLMo-2 32B,SCALA-NL,Dutch,,olmo
 OLMo-2 32B,SQuAD-NL,Dutch,,olmo
 OLMo-2 32B,MMLU-NL,Dutch,,olmo
-OLMo-2 32B,FAQUAD NLI,Portuguese,,olmo
-OLMo-2 32B,ASSIN2 RTE,Portuguese,,olmo
-OLMo-2 32B,OAB,Portuguese,,olmo
-OLMo-2 32B,ENEM,Portuguese,,olmo
+OLMo-2 32B,FAQUAD NLI,Portuguese,80.5,olmo
+OLMo-2 32B,ASSIN2 RTE,Portuguese,93.2,olmo
+OLMo-2 32B,OAB,Portuguese,50.8,olmo
+OLMo-2 32B,ENEM,Portuguese,75.0,olmo
+OLMo-2 7B,scala-da,Danish,16.7,olmo
+OLMo-2 7B,dansk,Danish,43.1,olmo
+OLMo-2 7B,scandiqa-da,Danish,20.3,olmo
+OLMo-2 7B,danske-talemaader,Danish,7.2,olmo
+OLMo-2 7B,scala-nl,Dutch,13.1,olmo
+OLMo-2 7B,conll-nl,Dutch,50.2,olmo
+OLMo-2 7B,squad-nl,Dutch,31.1,olmo
+OLMo-2 7B,mmlu-nl,Dutch,24.2,olmo
+OLMo-2 13B,scala-da,Danish,17.2,olmo
+OLMo-2 13B,dansk,Danish,47.1,olmo
+OLMo-2 13B,scandiqa-da,Danish,22.8,olmo
+OLMo-2 13B,danske-talemaader,Danish,34.1,olmo
+OLMo-2 13B,scala-nl,Dutch,24.3,olmo
+OLMo-2 13B,conll-nl,Dutch,48.7,olmo
+OLMo-2 13B,squad-nl,Dutch,32.2,olmo
+OLMo-2 13B,mmlu-nl,Dutch,35.6,olmo
