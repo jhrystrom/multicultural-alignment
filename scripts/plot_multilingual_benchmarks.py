@@ -80,6 +80,7 @@ def get_benchmark_data():
         .with_columns(pl.col("model").replace(MODEL_NAME_MAPPING))
         .cast({"model": get_model_enum()})
         .filter(~pl.col("benchmark").str.contains("ENEM"))
+        .drop_nulls()
     )
     return benches
 
@@ -249,7 +250,7 @@ if __name__ == "__main__":
         lang = ax.get_title().split(" = ")[-1]  # This gets the language name from the subplot title
 
         # For each family, plot the regression line
-        for family in ["gemma", "openai"]:
+        for family in ["gemma", "openai", "olmo"]:
             plot_data = benchmark_alignment.filter((pl.col("family") == family) & (pl.col("language") == lang))
 
             # Get intercept and slope

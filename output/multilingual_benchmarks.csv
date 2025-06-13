@@ -114,10 +114,10 @@ OLMo-2 32B,DANSK,Danish,57.4,olmo
 OLMo-2 32B,danske-talemaader,Danish,64.0,olmo
 OLMo-2 32B,scala-da,Danish,30.5,olmo
 OLMo-2 32B,scandiqa-da,Danish,23.7,olmo
-OLMo-2 32B,CoNLL-NL,Dutch,,olmo
-OLMo-2 32B,SCALA-NL,Dutch,,olmo
-OLMo-2 32B,SQuAD-NL,Dutch,,olmo
-OLMo-2 32B,MMLU-NL,Dutch,,olmo
+OLMo-2 32B,CoNLL-NL,Dutch,65.6,olmo
+OLMo-2 32B,SCALA-NL,Dutch,37.8,olmo
+OLMo-2 32B,SQuAD-NL,Dutch,23.0,olmo
+OLMo-2 32B,MMLU-NL,Dutch,62.0,olmo
 OLMo-2 32B,FAQUAD NLI,Portuguese,80.5,olmo
 OLMo-2 32B,ASSIN2 RTE,Portuguese,93.2,olmo
 OLMo-2 32B,OAB,Portuguese,50.8,olmo
