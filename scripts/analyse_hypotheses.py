@@ -105,13 +105,15 @@ def calculate_consistency(
     language_column: str = "language",
     pro_column: str = "response_pro_score",
     group_column: str = "model_name",
+    error_rate: float = 0.045,
 ) -> pl.DataFrame:
     language_responses = example_model.select("language", "question_key", pro_column, group_column).with_row_index("index")
+    reliability = 1 - error_rate
     self_joined_responses = language_responses.join(
         language_responses, on=["question_key", group_column, language_column]
     ).filter(pl.col("index") != pl.col("index_right"))
     return self_joined_responses.group_by("language", group_column).agg(
-        pl.corr(pro_column, f"{pro_column}_right", method="pearson").alias("consistency")
+        (pl.corr(pro_column, f"{pro_column}_right", method="spearman") / reliability).alias("consistency")
     )
 
 
