@@ -10,15 +10,27 @@ from multicultural_alignment.plot import get_model_color_dict
 
 
 def calculate_language_self_correlations(
-    example_model: pl.DataFrame, pro_column: str = "response_pro_score"
+    example_model: pl.DataFrame, pro_column: str = "response_pro_score", scoring_noise: float = 0.045
 ) -> pl.DataFrame:
+    """
+    Calculate self-consistency of language responses for a given model.
+    Parameters:
+    - example_model: Polars DataFrame containing the model's responses.
+    - pro_column: The column name for the pro score in the DataFrame.
+    - scoring_noise: The noise level to simulate in the scoring process. Based on human validated data.
+    """
     language_responses = example_model.select("language", "question_key", pro_column).with_row_index("index")
     self_joined_responses = language_responses.join(language_responses, on=["question_key", "language"]).filter(
         pl.col("index") != pl.col("index_right")
     )
-    return self_joined_responses.group_by("language").agg(
-        pl.corr(pro_column, f"{pro_column}_right", method="spearman").alias("self-consistency")
+    observed_correlations = (
+        self_joined_responses.group_by("language")
+        .agg(pl.corr(pro_column, f"{pro_column}_right", method="spearman").alias("observed_self_consistency"))
+        .with_columns(
+            (pl.col("observed_self_consistency") / (1 - scoring_noise)).alias("self-consistency")  # Adjust for scoring noise
+        )
     )
+    return observed_correlations
 
 
 def simplified_create_consistency(correlation_dicts: list[dict[str, pl.DataFrame]]) -> pl.DataFrame:

@@ -106,7 +106,7 @@ def plot_us_centric_bias(plot_data: pl.DataFrame) -> None:
     plt.ylabel("$\\beta_{BiasUS}$")
     plt.xlabel(None)
     # legend below plot in two columns
-    plt.legend(ncol=2, loc="lower center", bbox_to_anchor=(0.5, -0.43))
+    plt.legend(ncol=3, loc="lower center", bbox_to_anchor=(0.5, -0.43))
     plt.savefig(PLOT_DIR / "us_bias_coefficients.png", bbox_inches="tight")
 
 
