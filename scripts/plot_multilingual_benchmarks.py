@@ -141,7 +141,10 @@ def get_experiment_data() -> pl.DataFrame:
 
 
 def create_plot_data(
-    benches: pl.DataFrame, multilingual_coefficients: pl.DataFrame, regression_data: pl.DataFrame
+    benches: pl.DataFrame,
+    multilingual_coefficients: pl.DataFrame,
+    regression_data: pl.DataFrame,
+    regression_type: str = "normal",
 ) -> pl.DataFrame:
     alignment_clean = calculate_adjusted_alignments(regression_data=regression_data)
     avg_score = benches.group_by(["model", "language"]).agg(pl.col("score").mean()).rename({"model": "model_name"})
@@ -154,7 +157,7 @@ def create_plot_data(
         .rename({"score": "multilingual capability"})
         .with_columns(pl.col("language").replace(LANGUAGE_MAP))
         .rename({"adjusted_alignment": "cultural alignment"})
-        .join(multilingual_coefficients, on=["family", "language"])
+        .join(multilingual_coefficients.filter(pl.col("regression_type") == regression_type), on=["family", "language"])
     )
 
 
@@ -178,6 +181,7 @@ def plot_multilingual_coefficients(regression_data: pl.DataFrame) -> pl.DataFram
         "no_consistency": "alignment ~ 0 + multilingual:family:language",
         "interaction": "alignment ~ 0 + consistency:language + multilingual:family:language",
     }
+    all_multilingual_results_df = []
     for name, formula in formulas.items():
         logger.info(f"Running regression with formula: {formula}")
         regression_results = run_multilingual_regression(regression_data, regression_formula=formula)
@@ -218,7 +222,12 @@ def plot_multilingual_coefficients(regression_data: pl.DataFrame) -> pl.DataFram
         plt.legend(title=None)
         plt.savefig(PLOT_DIR / f"multilingual_coefficients_{name}.png", bbox_inches="tight")
         plt.close()
-    return multilingual_results_df.select("family", "language", "coefficient", "p_value")
+        all_multilingual_results_df.append(
+            multilingual_results_df.with_columns(
+                pl.lit(name).alias("regression_type"),
+            )
+        )
+    return pl.concat(all_multilingual_results_df).select("family", "language", "coefficient", "p_value", "regression_type")
 
 
 if __name__ == "__main__":
