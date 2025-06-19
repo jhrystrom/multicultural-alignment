@@ -1,3 +1,4 @@
+import argparse
 from typing import TypedDict
 
 import matplotlib.pyplot as plt
@@ -35,7 +36,10 @@ MODEL_NAME_MAPPING = {
     "OLMo-2 13B": "OLMo-2-1124-13B-Instruct",
     "OLMo-2 32B": "OLMo-2-0325-32B-Instruct",
 }
-
+ADJUSTMENT_FORMULAS = {
+    "interaction": "alignment ~ 0 + consistency:language + language:model_name",
+    "normal": "alignment ~ 0 + consistency + language:model_name",
+}
 # Regex
 language_pattern = r"language\[([^\]]+)\]"
 model_pattern = r"model_name\[T?\.?([^\]]+)\]"
@@ -85,14 +89,14 @@ def get_benchmark_data():
     return benches
 
 
-def calculate_adjusted_alignments(regression_data: pl.DataFrame) -> pl.DataFrame:
+def calculate_adjusted_alignments(regression_data: pl.DataFrame, regression_type: str = "normal") -> pl.DataFrame:
     all_alignments = []
     logger.debug(f"{regression_data.head()=}")
     N_ITERATIONS = 100
     for _ in tqdm(range(N_ITERATIONS)):
         resampled = regression_data.sample(fraction=1.0, with_replacement=True)
         multilingual_model = smf.ols(
-            formula="alignment ~ 0 + consistency + language:model_name",
+            formula=ADJUSTMENT_FORMULAS[regression_type],
             data=resampled.cast({"model_name": str}).to_pandas(),
         )
         multilingual_results = multilingual_model.fit()
@@ -146,7 +150,7 @@ def create_plot_data(
     regression_data: pl.DataFrame,
     regression_type: str = "normal",
 ) -> pl.DataFrame:
-    alignment_clean = calculate_adjusted_alignments(regression_data=regression_data)
+    alignment_clean = calculate_adjusted_alignments(regression_data=regression_data, regression_type=regression_type)
     avg_score = benches.group_by(["model", "language"]).agg(pl.col("score").mean()).rename({"model": "model_name"})
     logger.debug(f"{avg_score.head()=}")
     return (
@@ -231,13 +235,27 @@ def plot_multilingual_coefficients(regression_data: pl.DataFrame) -> pl.DataFram
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Plot multilingual benchmarks alignment")
+    parser.add_argument(
+        "--regression-type",
+        type=str,
+        choices=["normal", "no_consistency", "interaction"],
+        default="normal",
+        help="Type of regression to use for plotting coefficients",
+    )
+    args = parser.parse_args()
+    regression_type = args.regression_type
+
     sns.set_theme(font_scale=1.6, style="whitegrid")
     benchmarks = get_benchmark_data()
     regression_data = get_regression_data(benchmarks=benchmarks, experiment_data=get_experiment_data())
     multilingual_coefficients = plot_multilingual_coefficients(regression_data=regression_data)
 
     benchmark_alignment = create_plot_data(
-        benches=benchmarks, multilingual_coefficients=multilingual_coefficients, regression_data=regression_data
+        benches=benchmarks,
+        multilingual_coefficients=multilingual_coefficients,
+        regression_data=regression_data,
+        regression_type=regression_type,
     )
 
     logger.debug(f"{benchmark_alignment.head()=}")
