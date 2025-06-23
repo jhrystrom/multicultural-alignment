@@ -44,6 +44,7 @@ if __name__ == "__main__":
         legend=False,
     )
     plt.ylabel("")
+    plt.xlabel("Consistency Gap (Within - Between)")
 
     plt.savefig(PLOT_DIR / "cross_effects.png", bbox_inches="tight")
     plt.clf()
