@@ -83,7 +83,8 @@ def create_english_plot(filtered_plot_data: pl.DataFrame, metric: str) -> None:
         y="alignment",
         kind="bar",
         sharex=False,
-        errorbar="ci",
+        aspect=1.2,
+        errorbar=("pi", 100),
         palette=get_model_color_dict(),
     ).set_titles("{col_name}")
 
@@ -111,17 +112,18 @@ def create_monocultural_plot(filtered_plot_data: pl.DataFrame, metric: str) -> N
         y="alignment",
         kind="bar",
         sharex=False,
-        errorbar="ci",
-        aspect=1.3,
+        aspect=1.5,
+        errorbar="pi",
         palette=get_model_color_dict(),
     ).set_titles("{row_name} | {col_name}")
+    plt.subplots_adjust(hspace=0.35)  # Reduce vertical spacing (default is ~0.2-0.3)
 
     sns.move_legend(plot, loc="upper center", bbox_to_anchor=(0.42, 0.05), ncol=3, title=None)
 
     for ax in plot.axes.flat:
         ax.set_ylabel("")
 
-    plot.figure.supylabel("cultural alignment", x=0.035)
+    plot.figure.supylabel("cultural alignment", x=0.02)
     plot.set(xlabel=None)
     plt.savefig(PLOT_DIR / f"monolingual-{metric}-gt_alignment.png", bbox_inches="tight")
 
@@ -137,11 +139,10 @@ def create_portuguese_plot(filtered_plot_data: pl.DataFrame, metric: str) -> Non
         y="alignment",
         kind="bar",
         sharex=False,
-        errorbar="ci",
+        errorbar="pi",
+        height=6,
         palette=get_model_color_dict(),
-        aspect=1.1,
     ).set_titles("{col_name}")
-
     sns.move_legend(plot, loc="upper center", bbox_to_anchor=(0.42, 0.1), ncol=3, title=None)
     plot.set(xlabel=None)
     plt.savefig(PLOT_DIR / f"pt-{metric}_gt_alignment.png", bbox_inches="tight")
