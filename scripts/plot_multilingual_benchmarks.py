@@ -13,6 +13,7 @@ from tqdm import tqdm
 from multicultural_alignment.constants import LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
 from multicultural_alignment.models import add_families_df, get_model_enum
 from multicultural_alignment.plot import get_family_color_dict, get_model_color_dict
+from multicultural_alignment.regression import extract_results_df, extract_term
 
 
 class RSquared(TypedDict):
@@ -41,9 +42,6 @@ ADJUSTMENT_FORMULAS = {
     "normal": "alignment ~ 0 + consistency + language:model_name",
 }
 # Regex
-language_pattern = r"language\[([^\]]+)\]"
-model_pattern = r"model_name\[T?\.?([^\]]+)\]"
-family_pattern = r"family\[([^\]]+)\]"
 
 
 def invert_dict(d: dict) -> dict:
@@ -61,21 +59,6 @@ def calculate_rsquared(model) -> RSquared:
         fixed_effects_variance + random_effects_variance + residual_variance
     )
     return RSquared(marginal=R2_m, conditional=R2_c)
-
-
-def extract_results_df(results: RegressionResults) -> pl.DataFrame:
-    params = results.params
-    conf_int = results.conf_int()
-    return pl.DataFrame(
-        {
-            "term": params.index.tolist(),
-            "coefficient": params.values,
-            "std_err": results.bse.values,
-            "p_value": results.pvalues.values,
-            "conf_int_lower": conf_int[0].values,
-            "conf_int_upper": conf_int[1].values,
-        }
-    )
 
 
 def get_benchmark_data():
@@ -103,8 +86,8 @@ def calculate_adjusted_alignments(regression_data: pl.DataFrame, regression_type
         all_alignments.append(
             extract_results_df(multilingual_results)
             .with_columns(
-                pl.col("term").str.extract(language_pattern).alias("language"),
-                pl.col("term").str.extract(model_pattern).alias("model_name"),
+                extract_term("language"),
+                extract_term("model_name"),
             )
             .select(
                 pl.col("model_name"),
@@ -179,7 +162,7 @@ def run_multilingual_regression(regression_data: pl.DataFrame, regression_formul
     return family_results
 
 
-def plot_multilingual_coefficients(regression_data: pl.DataFrame) -> pl.DataFrame:
+def plot_multilingual_coefficients(regression_data: pl.DataFrame, regression_type: str | None = None) -> pl.DataFrame:
     formulas = {
         "normal": "alignment ~ 0 + consistency + multilingual:family:language",
         "no_consistency": "alignment ~ 0 + multilingual:family:language",
@@ -187,6 +170,8 @@ def plot_multilingual_coefficients(regression_data: pl.DataFrame) -> pl.DataFram
     }
     all_multilingual_results_df = []
     for name, formula in formulas.items():
+        if regression_type is not None and name != regression_type:
+            continue
         logger.info(f"Running regression with formula: {formula}")
         regression_results = run_multilingual_regression(regression_data, regression_formula=formula)
         rsquared = calculate_rsquared(regression_results)
@@ -194,8 +179,8 @@ def plot_multilingual_coefficients(regression_data: pl.DataFrame) -> pl.DataFram
         multilingual_results_df = (
             extract_results_df(regression_results)
             .with_columns(
-                pl.col("term").str.extract(family_pattern).alias("family"),
-                pl.col("term").str.extract(language_pattern).alias("language"),
+                extract_term("family"),
+                extract_term("language"),
             )
             .drop_nulls()
         )
@@ -249,7 +234,9 @@ if __name__ == "__main__":
     sns.set_theme(font_scale=1.6, style="whitegrid")
     benchmarks = get_benchmark_data()
     regression_data = get_regression_data(benchmarks=benchmarks, experiment_data=get_experiment_data())
-    multilingual_coefficients = plot_multilingual_coefficients(regression_data=regression_data)
+    multilingual_coefficients = plot_multilingual_coefficients(
+        regression_data=regression_data, regression_type=regression_type
+    )
 
     benchmark_alignment = create_plot_data(
         benches=benchmarks,
