@@ -6,23 +6,23 @@ Gemma-2 2B,MMLU (5-shot),English,52.2,gemma
 Gemma-2 9B,MMLU (5-shot),English,71.3,gemma
 Gemma-2 27B,MMLU (5-shot),English,75.2,gemma
 GPT-3.5 Turbo,DROP (3-shot),English,64.1,openai
+GPT-3.5 Turbo,IFEval,English,66.9,openai
 GPT-4 Turbo,DROP (3-shot),English,86.0,openai
+GPT-4 Turbo,IFEval,English,84.5,openai
 GPT-4o,DROP (3-shot),English,83.7,openai
+GPT-4o,IFEval,English,81.0,openai
 Gemma-2 2B,DROP (3-shot),English,51.2,gemma
 Gemma-2 9B,DROP (3-shot),English,69.4,gemma
 Gemma-2 27B,DROP (3-shot),English,74.2,gemma
+Gemma-2 2B,IFEval,English,56.7,gemma
+Gemma-2 9B,IFEval,English,74.4,gemma
+Gemma-2 27B,IFEval,English,79.8,gemma
 GPT-3.5 Turbo,GSM-8K (5-shot),English,57.1,openai
 GPT-4 Turbo,GSM-8K (5-shot),English,89.6,openai
 GPT-4o,GSM-8K (5-shot),English,89.9,openai
 Gemma-2 2B,GSM-8K (5-shot),English,24.3,gemma
 Gemma-2 9B,GSM-8K (5-shot),English,68.6,gemma
 Gemma-2 27B,GSM-8K (5-shot),English,74.0,gemma
-GPT-3.5 Turbo,HumanEval (0-shot),English,48.1,openai
-GPT-4 Turbo,HumanEval (0-shot),English,88.2,openai
-GPT-4o,HumanEval (0-shot),English,91.0,openai
-Gemma-2 2B,HumanEval (0-shot),English,20.1,gemma
-Gemma-2 9B,HumanEval (0-shot),English,40.2,gemma
-Gemma-2 27B,HumanEval (0-shot),English,51.8,gemma
 GPT-3.5 Turbo,DANSK,Danish,61.3,openai
 GPT-4o,DANSK,Danish,71.2,openai
 Gemma-2 2B,DANSK,Danish,28.2,gemma
@@ -49,7 +49,7 @@ Gemma-2 2B,CoNLL-NL,Dutch,40.6,gemma
 Gemma-2 9B,CoNLL-NL,Dutch,55.7,gemma
 Gemma-2 27B,CoNLL-NL,Dutch,65.2,gemma
 GPT-3.5 Turbo,SCALA-NL,Dutch,59.0,openai
-GPT-4o,SCALA-NL,Dutch,56.3,openai
+GPT-4o,SCALA-NL,Dutch,58.9,openai
 Gemma-2 2B,SCALA-NL,Dutch,19.6,gemma
 Gemma-2 9B,SCALA-NL,Dutch,51.0,gemma
 Gemma-2 27B,SCALA-NL,Dutch,59.0,gemma
@@ -63,10 +63,6 @@ GPT-4o,MMLU-NL,Dutch,73.1,openai
 Gemma-2 2B,MMLU-NL,Dutch,29.3,gemma
 Gemma-2 9B,MMLU-NL,Dutch,54.0,gemma
 Gemma-2 27B,MMLU-NL,Dutch,59.7,gemma
-GPT-3.5 Turbo,ENEM,Portuguese,72.2,openai
-Gemma-2 2B,ENEM,Portuguese,41.7,gemma
-Gemma-2 9B,ENEM,Portuguese,64.0,gemma
-Gemma-2 27B,ENEM,Portuguese,70.5,gemma
 GPT-3.5 Turbo,ASSIN2 RTE,Portuguese,88.2,openai
 Gemma-2 2B,ASSIN2 RTE,Portuguese,36.7,gemma
 Gemma-2 9B,ASSIN2 RTE,Portuguese,56.0,gemma
@@ -75,6 +71,9 @@ GPT-3.5 Turbo,FAQUAD NLI,Portuguese,74.6,openai
 Gemma-2 2B,FAQUAD NLI,Portuguese,72.8,gemma
 Gemma-2 9B,FAQUAD NLI,Portuguese,78.2,gemma
 Gemma-2 27B,FAQUAD NLI,Portuguese,78.7,gemma
+Gemma-2 2B,OAB,Portuguese,28.8,gemma
+Gemma-2 9B,OAB,Portuguese,53.4,gemma
+Gemma-2 27B,OAB,Portuguese,56.4,gemma
 gpt-4-turbo,dansk,Danish,68.8,openai
 gpt-4-turbo,conll-nl,Dutch,74.9,openai
 gpt-4-turbo,scala-da,Danish,72.2,openai
@@ -97,7 +96,6 @@ OLMo-2 7B,GSM-8K,English,85.2,olmo
 OLMo-2 7B,FAQUAD NLI,Portuguese,70.6,olmo
 OLMo-2 7B,ASSIN2 RTE,Portuguese,87.1,olmo
 OLMo-2 7B,OAB,Portuguese,39.3,olmo
-OLMo-2 7B,ENEM,Portuguese,55.5,olmo
 OLMo-2 13B,IFEval,English,80.4,olmo
 OLMo-2 13B,MMLU,English,68.6,olmo
 OLMo-2 13B,DROP,English,72.1,olmo
@@ -105,7 +103,6 @@ OLMo-2 13B,GSM-8K,English,87.4,olmo
 OLMo-2 13B,FAQUAD NLI,Portuguese,79.5,olmo
 OLMo-2 13B,ASSIN2 RTE,Portuguese,90.9,olmo
 OLMo-2 13B,OAB,Portuguese,41.0,olmo
-OLMo-2 13B,ENEM,Portuguese,59.2,olmo
 OLMo-2 32B,IFEval,English,85.6,olmo
 OLMo-2 32B,MMLU,English,77.3,olmo
 OLMo-2 32B,DROP,English,78.0,olmo
@@ -121,7 +118,6 @@ OLMo-2 32B,MMLU-NL,Dutch,62.0,olmo
 OLMo-2 32B,FAQUAD NLI,Portuguese,80.5,olmo
 OLMo-2 32B,ASSIN2 RTE,Portuguese,93.2,olmo
 OLMo-2 32B,OAB,Portuguese,50.8,olmo
-OLMo-2 32B,ENEM,Portuguese,75.0,olmo
 OLMo-2 7B,scala-da,Danish,16.7,olmo
 OLMo-2 7B,dansk,Danish,43.1,olmo
 OLMo-2 7B,scandiqa-da,Danish,20.3,olmo
