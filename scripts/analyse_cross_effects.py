@@ -16,12 +16,14 @@ if __name__ == "__main__":
     )
 
     N_BOOTSTRAPS = 100
+    SCORING_NOISE = 0.045  # Based on human validated data
     all_dfs = []
     for _ in tqdm(range(N_BOOTSTRAPS)):
         corr_result = (
             self_joined.sample(fraction=1.0, with_replacement=True)
             .group_by("model_name", "same_language")
-            .agg(pl.corr(pl.col("response_pro_score"), pl.col("response_pro_score_right")))
+            .agg(pl.corr(pl.col("response_pro_score"), pl.col("response_pro_score_right")).alias("self_consistency"))
+            .with_columns(pl.col("self_consistency") / (1 - SCORING_NOISE))
             .pivot(on=["same_language"], index="model_name")
         ).select("model_name", "true", "false")
         all_dfs.append(corr_result)
