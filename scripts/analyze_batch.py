@@ -56,12 +56,6 @@ def create_full_truth_df(prompt_responses: pd.DataFrame, analysis_responses: lis
     return pd.concat([prompt_responses, score_df], axis=1)
 
 
-def _load_openai_mistral() -> pd.DataFrame:
-    openai_responses = load_model_family("openai")
-    mistral_responses = load_model_family("mistral")
-    return pd.concat([openai_responses, mistral_responses], ignore_index=True).reset_index(drop=True)
-
-
 def load_model_family(model_family: str, output_dir: Path = OUTPUT_DIR) -> pd.DataFrame:
     model_pattern = "all_prompts_responses_{model_name}.csv"
     family_pattern = "all_prompts_responses_{model_family}*.csv"

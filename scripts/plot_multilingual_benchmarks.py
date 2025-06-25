@@ -10,7 +10,7 @@ from loguru import logger
 from statsmodels.regression.linear_model import RegressionResults
 from tqdm import tqdm
 
-from multicultural_alignment.constants import LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
+from multicultural_alignment.constants import COUNTRY_LANG_MAP, LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
 from multicultural_alignment.models import add_families_df, get_model_enum
 from multicultural_alignment.plot import get_family_color_dict, get_model_color_dict
 from multicultural_alignment.regression import extract_results_df, extract_term
@@ -41,7 +41,6 @@ ADJUSTMENT_FORMULAS = {
     "interaction": "alignment ~ 0 + consistency:language + language:model_name",
     "normal": "alignment ~ 0 + consistency + language:model_name",
 }
-# Regex
 
 
 def invert_dict(d: dict) -> dict:
@@ -98,7 +97,7 @@ def calculate_adjusted_alignments(regression_data: pl.DataFrame, regression_type
     return pl.concat(all_alignments).drop_nulls()
 
 
-def get_regression_data(benchmarks: pl.DataFrame, experiment_data: pl.DataFrame) -> pl.DataFrame:
+def get_language_regression_data(benchmarks: pl.DataFrame, experiment_data: pl.DataFrame) -> pl.DataFrame:
     aggregated_bench = benchmarks.group_by("model", "language").agg(pl.col("score").mean())
     logger.debug(f"{aggregated_bench.head()=}")
     regression_data = add_families_df(
@@ -111,6 +110,31 @@ def get_regression_data(benchmarks: pl.DataFrame, experiment_data: pl.DataFrame)
         .filter(pl.col("model_name") != "Baseline_fifty_percent")
         .sort("model_name")
         .filter("native")
+        .with_columns(pl.col("language").replace(LANGUAGE_MAP))
+    )
+    logger.debug(f"{regression_data.head()=}")
+    return (
+        regression_data.join(aggregated_bench, left_on=["model_name", "language"], right_on=["model", "language"])
+        .rename({"score": "multilingual", "metric_value": "alignment"})
+        .with_columns(
+            pl.col("multilingual") / 100.0,
+        )
+    )
+
+
+def get_country_regression_data(benchmarks: pl.DataFrame, experiment_data: pl.DataFrame) -> pl.DataFrame:
+    aggregated_bench = benchmarks.group_by("model", "language").agg(pl.col("score").mean())
+    logger.debug(f"{aggregated_bench.head()=}")
+    regression_data = add_families_df(
+        experiment_data.filter(pl.col("gt_type") == "country")
+        .with_columns(pl.col("gt_group").replace(COUNTRY_LANG_MAP).alias("spoken_language"))
+        .with_columns((pl.col("spoken_language") == pl.col("language")).alias("native"))
+        .with_row_index()
+    )
+    regression_data = (
+        regression_data.filter(pl.col("family") != "mistral")
+        .filter(pl.col("model_name") != "Baseline_fifty_percent")
+        .sort("model_name")
         .with_columns(pl.col("language").replace(LANGUAGE_MAP))
     )
     logger.debug(f"{regression_data.head()=}")
@@ -160,6 +184,20 @@ def run_multilingual_regression(regression_data: pl.DataFrame, regression_formul
     logger.info("Regression results:")
     logger.info(family_results.summary())
     return family_results
+
+
+def run_multicountry_regression(country_regression_data: pl.DataFrame) -> pl.DataFrame:
+    for (language,), language_data in country_regression_data.group_by("language"):
+        if language != "English":
+            continue
+        logger.info(f"Running regression for language: {language}")
+        regression_formula = "alignment ~ 0 + consistency + multilingual:family:gt_group"
+        country_results = smf.mixedlm(
+            formula=regression_formula,
+            groups="model_name",
+            data=language_data.to_pandas(),
+        ).fit()
+    return country_results
 
 
 def plot_multilingual_coefficients(regression_data: pl.DataFrame, regression_type: str | None = None) -> pl.DataFrame:
@@ -233,7 +271,9 @@ if __name__ == "__main__":
 
     sns.set_theme(font_scale=1.6, style="whitegrid")
     benchmarks = get_benchmark_data()
-    regression_data = get_regression_data(benchmarks=benchmarks, experiment_data=get_experiment_data())
+    experiment_data = get_experiment_data()
+    regression_data = get_language_regression_data(benchmarks=benchmarks, experiment_data=experiment_data)
+    # country_regression_data = get_country_regression_data(benchmarks=benchmarks, experiment_data=experiment_data)
     multilingual_coefficients = plot_multilingual_coefficients(
         regression_data=regression_data, regression_type=regression_type
     )
