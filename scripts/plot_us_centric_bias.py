@@ -95,6 +95,7 @@ def get_confidence_data(significant: pl.DataFrame) -> pl.DataFrame:
 
 
 def plot_us_centric_bias(plot_data: pl.DataFrame) -> None:
+    plt.figure(figsize=(12, 6))
     sns.barplot(
         data=plot_data.sort("model_name").cast({"model_name": str}).with_columns(pl.col("language").replace(LANGUAGE_MAP)),
         x="language",
@@ -106,12 +107,12 @@ def plot_us_centric_bias(plot_data: pl.DataFrame) -> None:
     plt.ylabel("$\\beta_{BiasUS}$")
     plt.xlabel(None)
     # legend below plot in two columns
-    plt.legend(ncol=3, loc="lower center", bbox_to_anchor=(0.5, -0.43))
+    plt.legend(ncol=3, loc="lower center", bbox_to_anchor=(0.45, -0.43))
     plt.savefig(PLOT_DIR / "us_bias_coefficients.png", bbox_inches="tight")
 
 
 def main():
-    sns.set_theme(style="whitegrid", font_scale=1.5)
+    sns.set_theme(style="whitegrid", font_scale=1.7)
     logger.info("Running US-centric bias regression")
     us_results = run_us_regression()
     logger.info(f"Regression table:\n{us_results.summary()}")

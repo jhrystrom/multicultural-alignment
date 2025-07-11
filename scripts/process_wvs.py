@@ -42,6 +42,16 @@ if __name__ == "__main__":
 
     sample = fulldf.head(2).collect()
 
+    abortion_df = (
+        fulldf.select("cntry_AN", "F120")
+        .filter(pl.col("cntry_AN").is_in({"US", "DK"}))
+        .filter(pl.col("F120") > 0)
+        .group_by("cntry_AN")
+        .agg((pl.col("F120") <= 4).mean().alias("against_abortion"))
+        .collect()
+    )
+    print(abortion_df)
+
     relevant_columns = extract_relevant_columns(fulldf.collect())
 
     max_values = fulldf.select(relevant_columns).max()

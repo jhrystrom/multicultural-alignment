@@ -71,9 +71,13 @@ def get_benchmark_data():
     return benches
 
 
+def save_regression_results(results: RegressionResults, regression_type: str) -> None:
+    output_path = OUTPUT_DIR / f"multilingual_regression_results_{regression_type}.txt"
+    output_path.write_text(results.summary().as_text())
+
+
 def calculate_adjusted_alignments(regression_data: pl.DataFrame, regression_type: str = "normal") -> pl.DataFrame:
     all_alignments = []
-    logger.debug(f"{regression_data.head()=}")
     N_ITERATIONS = 100
     for _ in tqdm(range(N_ITERATIONS)):
         resampled = regression_data.sample(fraction=1.0, with_replacement=True)
@@ -99,7 +103,6 @@ def calculate_adjusted_alignments(regression_data: pl.DataFrame, regression_type
 
 def get_language_regression_data(benchmarks: pl.DataFrame, experiment_data: pl.DataFrame) -> pl.DataFrame:
     aggregated_bench = benchmarks.group_by("model", "language").agg(pl.col("score").mean())
-    logger.debug(f"{aggregated_bench.head()=}")
     regression_data = add_families_df(
         experiment_data.filter(pl.col("gt_type") == "language")
         .with_row_index()
@@ -112,7 +115,6 @@ def get_language_regression_data(benchmarks: pl.DataFrame, experiment_data: pl.D
         .filter("native")
         .with_columns(pl.col("language").replace(LANGUAGE_MAP))
     )
-    logger.debug(f"{regression_data.head()=}")
     return (
         regression_data.join(aggregated_bench, left_on=["model_name", "language"], right_on=["model", "language"])
         .rename({"score": "multilingual", "metric_value": "alignment"})
@@ -124,7 +126,6 @@ def get_language_regression_data(benchmarks: pl.DataFrame, experiment_data: pl.D
 
 def get_country_regression_data(benchmarks: pl.DataFrame, experiment_data: pl.DataFrame) -> pl.DataFrame:
     aggregated_bench = benchmarks.group_by("model", "language").agg(pl.col("score").mean())
-    logger.debug(f"{aggregated_bench.head()=}")
     regression_data = add_families_df(
         experiment_data.filter(pl.col("gt_type") == "country")
         .with_columns(pl.col("gt_group").replace(COUNTRY_LANG_MAP).alias("spoken_language"))
@@ -137,7 +138,6 @@ def get_country_regression_data(benchmarks: pl.DataFrame, experiment_data: pl.Da
         .sort("model_name")
         .with_columns(pl.col("language").replace(LANGUAGE_MAP))
     )
-    logger.debug(f"{regression_data.head()=}")
     return (
         regression_data.join(aggregated_bench, left_on=["model_name", "language"], right_on=["model", "language"])
         .rename({"score": "multilingual", "metric_value": "alignment"})
@@ -159,7 +159,6 @@ def create_plot_data(
 ) -> pl.DataFrame:
     alignment_clean = calculate_adjusted_alignments(regression_data=regression_data, regression_type=regression_type)
     avg_score = benches.group_by(["model", "language"]).agg(pl.col("score").mean()).rename({"model": "model_name"})
-    logger.debug(f"{avg_score.head()=}")
     return (
         add_families_df(alignment_clean)
         .join(avg_score, on=["model_name", "language"])
@@ -212,6 +211,7 @@ def plot_multilingual_coefficients(regression_data: pl.DataFrame, regression_typ
             continue
         logger.info(f"Running regression with formula: {formula}")
         regression_results = run_multilingual_regression(regression_data, regression_formula=formula)
+        save_regression_results(regression_results, regression_type=name)
         rsquared = calculate_rsquared(regression_results)
         logger.info(f"R-squared values: {rsquared}")
         multilingual_results_df = (
@@ -285,7 +285,6 @@ if __name__ == "__main__":
         regression_type=regression_type,
     )
 
-    logger.debug(f"{benchmark_alignment.head()=}")
     plot = sns.relplot(
         data=benchmark_alignment,
         x="multilingual capability",
