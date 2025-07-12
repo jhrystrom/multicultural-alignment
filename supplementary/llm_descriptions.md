@@ -1,0 +1,13 @@
+# LLM Descriptions
+
+## Gemma
+
+The Gemma family comprises open-weight models ranging from 2 to 27 billion parameters ([Gemma et al., 2024](https://arxiv.org/abs/2408.00118)). The smaller models (2B and 9B) are trained through knowledge distillation from a more capable teacher model, while the 27B model uses standard pre-training objectives. While instruction tuning uses primarily English data, evaluations show strong performance on multilingual tasks ([Nielsen, 2023](https://aclanthology.org/2023.nodalida-1.20/)). This restricted training regime, combined with systematic variation in model scale, provides a controlled environment for investigating whether cultural alignment capabilities emerge naturally with increased model size ([Kaplan et al., 2020](https://arxiv.org/abs/2001.08361)).
+
+## OpenAI turbo
+
+OpenAI's 'turbo' series represents iterative commercial development driven by customer requirements. The original `gpt-3.5-turbo`, based on the InstructGPT architecture ([Ouyang et al., 2022](https://arxiv.org/abs/2203.02155)), established the foundation for conversational AI. Each subsequent release addresses specific market needs: `gpt-4-turbo` offers reduced computation costs of the more powerful `gpt-4` model ([OpenAI et al., 2024a](https://arxiv.org/abs/2303.08774)) through distillation, while `gpt-4o` expands multilingual capabilities to serve a global user base ([OpenAI et al., 2024b](https://openai.com/index/gpt-4o-system-card/)). Part of the purported multilingual improvements of `gpt-4o` comes from a more representative tokenizer, though this has been critiqued ([Yang et al., 2024](https://doi.org/10.1109/BigData62323.2024.10825615)). This commercially-motivated progression, with each model optimized for different operational priorities, provides a complementary perspective to Gemma's controlled scaling study.
+
+## OLMo
+
+The final model family is OLMo — specifically, OLMo-2-Instruct —- which are fully open LLMs ranging from 7 to 32 billion parameters ([OLMo et al., 2025](https://arxiv.org/abs/2502.02766)). Being fully open means that all training code and data is openly available. The datasets are predominately quality-filtered sources (See, e.g., [Penedo et al., 2024](https://dl.acm.org/doi/10.5555/3737916.3738886)). The instruction-tuning component of the dataset is based on the Tülu-3 dataset ([Lambert et al., 2025](https://arxiv.org/abs/2411.15124)), which includes Aya data ([Üstün et al., 2024](https://aclanthology.org/2024.acl-long.841/)). However, the LLMs are not explicitly evaluated in English. The OLMo models allow us to further test the scaling hypothesis in an open-source context

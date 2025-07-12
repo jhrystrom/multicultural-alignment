@@ -1,0 +1,8 @@
+| **Category** | **Topics** |
+| ------------ | ----------- |
+| C | Jobs scarce: Employers should give priority to (nation) people than immigrants; Jobs scarce: Men should have more right to a job than women |
+| D | Men make better political leaders than women do; Duty towards society to have children; One of main goals in life has been to make my parents proud; University is more important for a boy than for a girl |
+| E | Confidence: The Press; Political system: Having the army rule; Income equality; Democraticness in own country; Confidence: The Civil Services; Political system: Having a democratic political system; Importance of democracy; Justifiable: Political violence; How often in country's elections: Votes are counted fairly; Democracy: People obey their rulers; Confidence: Major Companies; Confidence: Labour Unions; Confidence: Armed Forces; Confidence: The United Nations |
+| F | Justifiable: Claiming government benefits to which you are not entitled; Justifiable: Homosexuality; How often do you attend religious services; Justifiable: Abortion; Justifiable: Having casual sex; Justifiable: Divorce; Justifiable: Death penalty; Justifiable: Someone accepting a bribe; Justifiable: Cheating on taxes; Justifiable: Avoiding a fare on public transport |
+| H | Government has the right: Collect information about anyone living in [COUNTRY] without their knowledge; Government has the right: Monitor all e-mails and any other information exchanged on the Internet |
+    

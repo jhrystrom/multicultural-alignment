@@ -8,6 +8,7 @@ from statsmodels.regression.linear_model import RegressionResults
 from multicultural_alignment.constants import LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
 from multicultural_alignment.models import add_families_df
 from multicultural_alignment.plot import get_model_color_dict
+from multicultural_alignment.regression import save_regression_results
 
 language_pattern = r"language\[([^\]]+)\]"
 model_pattern = r"model_name\[T?\.?([^\]]+)\]"
@@ -115,6 +116,7 @@ def main():
     sns.set_theme(style="whitegrid", font_scale=1.7)
     logger.info("Running US-centric bias regression")
     us_results = run_us_regression()
+    save_regression_results(us_results, regression_type="normal", rq_method="us_centric_bias")
     logger.info(f"Regression table:\n{us_results.summary()}")
     plot_data = get_confidence_data(get_coefficients(us_results))
     plot_us_centric_bias(plot_data)

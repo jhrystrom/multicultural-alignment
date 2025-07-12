@@ -13,7 +13,7 @@ from tqdm import tqdm
 from multicultural_alignment.constants import COUNTRY_LANG_MAP, LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
 from multicultural_alignment.models import add_families_df, get_model_enum
 from multicultural_alignment.plot import get_family_color_dict, get_model_color_dict
-from multicultural_alignment.regression import extract_results_df, extract_term
+from multicultural_alignment.regression import extract_results_df, extract_term, save_regression_results
 
 
 class RSquared(TypedDict):
@@ -69,11 +69,6 @@ def get_benchmark_data():
         .drop_nulls()
     )
     return benches
-
-
-def save_regression_results(results: RegressionResults, regression_type: str) -> None:
-    output_path = OUTPUT_DIR / f"multilingual_regression_results_{regression_type}.txt"
-    output_path.write_text(results.summary().as_text())
 
 
 def calculate_adjusted_alignments(regression_data: pl.DataFrame, regression_type: str = "normal") -> pl.DataFrame:

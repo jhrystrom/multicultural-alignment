@@ -1,0 +1,103 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:           metric_value   R-squared:                       0.685
+Model:                            OLS   Adj. R-squared:                  0.684
+Method:                 Least Squares   F-statistic:                     438.9
+Date:                Sat, 12 Jul 2025   Prob (F-statistic):               0.00
+Time:                        11:24:16   Log-Likelihood:                 12042.
+No. Observations:               16000   AIC:                        -2.392e+04
+Df Residuals:                   15920   BIC:                        -2.331e+04
+Df Model:                          79                                         
+Covariance Type:            nonrobust                                         
+==================================================================================================================================
+                                                                     coef    std err          t      P>|t|      [0.025      0.975]
+----------------------------------------------------------------------------------------------------------------------------------
+Intercept                                                          0.0941      0.011      8.234      0.000       0.072       0.117
+us[T.True]                                                         0.0468      0.016      2.894      0.004       0.015       0.078
+language[T.en]                                                    -0.0096      0.012     -0.794      0.427      -0.033       0.014
+language[T.nl]                                                    -0.1203      0.016     -7.441      0.000      -0.152      -0.089
+language[T.pt]                                                     0.0268      0.014      1.912      0.056      -0.001       0.054
+model_name[T.OLMo-2-0325-32B-Instruct]:language[da]                0.6049      0.016     37.426      0.000       0.573       0.637
+model_name[T.OLMo-2-1124-13B-Instruct]:language[da]                0.3313      0.016     20.496      0.000       0.300       0.363
+model_name[T.OLMo-2-1124-7B-Instruct]:language[da]                 0.3587      0.016     22.192      0.000       0.327       0.390
+model_name[T.gemma-2-27b-it]:language[da]                          0.6212      0.016     38.435      0.000       0.590       0.653
+model_name[T.gemma-2-2b-it]:language[da]                           0.2457      0.016     15.200      0.000       0.214       0.277
+model_name[T.gemma-2-9b-it]:language[da]                           0.4751      0.016     29.393      0.000       0.443       0.507
+model_name[T.gpt-3.5-turbo-0125]:language[da]                      0.4174      0.016     25.827      0.000       0.386       0.449
+model_name[T.gpt-4-turbo-2024-04-09]:language[da]                  0.6256      0.016     38.709      0.000       0.594       0.657
+model_name[T.gpt-4o]:language[da]                                  0.6778      0.016     41.938      0.000       0.646       0.710
+model_name[T.OLMo-2-0325-32B-Instruct]:language[en]                0.5024      0.006     87.923      0.000       0.491       0.514
+model_name[T.OLMo-2-1124-13B-Instruct]:language[en]                0.5220      0.006     91.344      0.000       0.511       0.533
+model_name[T.OLMo-2-1124-7B-Instruct]:language[en]                 0.4090      0.006     71.579      0.000       0.398       0.420
+model_name[T.gemma-2-27b-it]:language[en]                          0.4727      0.006     82.721      0.000       0.461       0.484
+model_name[T.gemma-2-2b-it]:language[en]                           0.3440      0.006     60.205      0.000       0.333       0.355
+model_name[T.gemma-2-9b-it]:language[en]                           0.4051      0.006     70.899      0.000       0.394       0.416
+model_name[T.gpt-3.5-turbo-0125]:language[en]                      0.2380      0.006     41.652      0.000       0.227       0.249
+model_name[T.gpt-4-turbo-2024-04-09]:language[en]                  0.4535      0.006     79.355      0.000       0.442       0.465
+model_name[T.gpt-4o]:language[en]                                  0.4944      0.006     86.517      0.000       0.483       0.506
+model_name[T.OLMo-2-0325-32B-Instruct]:language[nl]                0.6074      0.016     37.580      0.000       0.576       0.639
+model_name[T.OLMo-2-1124-13B-Instruct]:language[nl]                0.3394      0.016     20.999      0.000       0.308       0.371
+model_name[T.OLMo-2-1124-7B-Instruct]:language[nl]                 0.4311      0.016     26.675      0.000       0.399       0.463
+model_name[T.gemma-2-27b-it]:language[nl]                          0.6941      0.016     42.943      0.000       0.662       0.726
+model_name[T.gemma-2-2b-it]:language[nl]                           0.5289      0.016     32.725      0.000       0.497       0.561
+model_name[T.gemma-2-9b-it]:language[nl]                           0.5426      0.016     33.573      0.000       0.511       0.574
+model_name[T.gpt-3.5-turbo-0125]:language[nl]                      0.4739      0.016     29.322      0.000       0.442       0.506
+model_name[T.gpt-4-turbo-2024-04-09]:language[nl]                  0.6496      0.016     40.190      0.000       0.618       0.681
+model_name[T.gpt-4o]:language[nl]                                  0.7395      0.016     45.752      0.000       0.708       0.771
+model_name[T.OLMo-2-0325-32B-Instruct]:language[pt]                0.4730      0.011     41.385      0.000       0.451       0.495
+model_name[T.OLMo-2-1124-13B-Instruct]:language[pt]                0.4223      0.011     36.952      0.000       0.400       0.445
+model_name[T.OLMo-2-1124-7B-Instruct]:language[pt]                 0.2708      0.011     23.695      0.000       0.248       0.293
+model_name[T.gemma-2-27b-it]:language[pt]                          0.4906      0.011     42.931      0.000       0.468       0.513
+model_name[T.gemma-2-2b-it]:language[pt]                           0.4501      0.011     39.384      0.000       0.428       0.473
+model_name[T.gemma-2-9b-it]:language[pt]                           0.4767      0.011     41.712      0.000       0.454       0.499
+model_name[T.gpt-3.5-turbo-0125]:language[pt]                      0.3762      0.011     32.918      0.000       0.354       0.399
+model_name[T.gpt-4-turbo-2024-04-09]:language[pt]                  0.4977      0.011     43.551      0.000       0.475       0.520
+model_name[T.gpt-4o]:language[pt]                                  0.4639      0.011     40.592      0.000       0.442       0.486
+us[T.True]:language[T.en]                                         -0.0233      0.020     -1.155      0.248      -0.063       0.016
+us[T.True]:language[T.nl]                                         -0.0070      0.023     -0.305      0.760      -0.052       0.038
+us[T.True]:language[T.pt]                                         -0.0906      0.021     -4.236      0.000      -0.132      -0.049
+us[T.True]:model_name[T.OLMo-2-0325-32B-Instruct]:language[da]    -0.0677      0.023     -2.963      0.003      -0.113      -0.023
+us[T.True]:model_name[T.OLMo-2-1124-13B-Instruct]:language[da]     0.0085      0.023      0.370      0.711      -0.036       0.053
+us[T.True]:model_name[T.OLMo-2-1124-7B-Instruct]:language[da]     -0.1251      0.023     -5.473      0.000      -0.170      -0.080
+us[T.True]:model_name[T.gemma-2-27b-it]:language[da]              -0.1338      0.023     -5.854      0.000      -0.179      -0.089
+us[T.True]:model_name[T.gemma-2-2b-it]:language[da]                0.0565      0.023      2.470      0.014       0.012       0.101
+us[T.True]:model_name[T.gemma-2-9b-it]:language[da]               -0.1049      0.023     -4.589      0.000      -0.150      -0.060
+us[T.True]:model_name[T.gpt-3.5-turbo-0125]:language[da]          -0.0981      0.023     -4.290      0.000      -0.143      -0.053
+us[T.True]:model_name[T.gpt-4-turbo-2024-04-09]:language[da]      -0.1397      0.023     -6.111      0.000      -0.184      -0.095
+us[T.True]:model_name[T.gpt-4o]:language[da]                      -0.1382      0.023     -6.045      0.000      -0.183      -0.093
+us[T.True]:model_name[T.OLMo-2-0325-32B-Instruct]:language[en]     0.0875      0.017      5.105      0.000       0.054       0.121
+us[T.True]:model_name[T.OLMo-2-1124-13B-Instruct]:language[en]     0.0823      0.017      4.803      0.000       0.049       0.116
+us[T.True]:model_name[T.OLMo-2-1124-7B-Instruct]:language[en]      0.0662      0.017      3.859      0.000       0.033       0.100
+us[T.True]:model_name[T.gemma-2-27b-it]:language[en]               0.0963      0.017      5.620      0.000       0.063       0.130
+us[T.True]:model_name[T.gemma-2-2b-it]:language[en]                0.0996      0.017      5.810      0.000       0.066       0.133
+us[T.True]:model_name[T.gemma-2-9b-it]:language[en]                0.1415      0.017      8.255      0.000       0.108       0.175
+us[T.True]:model_name[T.gpt-3.5-turbo-0125]:language[en]           0.1357      0.017      7.914      0.000       0.102       0.169
+us[T.True]:model_name[T.gpt-4-turbo-2024-04-09]:language[en]       0.1222      0.017      7.126      0.000       0.089       0.156
+us[T.True]:model_name[T.gpt-4o]:language[en]                       0.1334      0.017      7.779      0.000       0.100       0.167
+us[T.True]:model_name[T.OLMo-2-0325-32B-Instruct]:language[nl]    -0.0013      0.023     -0.057      0.955      -0.046       0.044
+us[T.True]:model_name[T.OLMo-2-1124-13B-Instruct]:language[nl]    -0.0515      0.023     -2.253      0.024      -0.096      -0.007
+us[T.True]:model_name[T.OLMo-2-1124-7B-Instruct]:language[nl]     -0.0307      0.023     -1.342      0.180      -0.075       0.014
+us[T.True]:model_name[T.gemma-2-27b-it]:language[nl]              -0.0729      0.023     -3.189      0.001      -0.118      -0.028
+us[T.True]:model_name[T.gemma-2-2b-it]:language[nl]                0.0096      0.023      0.420      0.675      -0.035       0.054
+us[T.True]:model_name[T.gemma-2-9b-it]:language[nl]               -0.0429      0.023     -1.876      0.061      -0.088       0.002
+us[T.True]:model_name[T.gpt-3.5-turbo-0125]:language[nl]          -0.1163      0.023     -5.088      0.000      -0.161      -0.072
+us[T.True]:model_name[T.gpt-4-turbo-2024-04-09]:language[nl]      -0.0270      0.023     -1.181      0.237      -0.072       0.018
+us[T.True]:model_name[T.gpt-4o]:language[nl]                      -0.1095      0.023     -4.791      0.000      -0.154      -0.065
+us[T.True]:model_name[T.OLMo-2-0325-32B-Instruct]:language[pt]     0.0702      0.020      3.548      0.000       0.031       0.109
+us[T.True]:model_name[T.OLMo-2-1124-13B-Instruct]:language[pt]     0.0808      0.020      4.083      0.000       0.042       0.120
+us[T.True]:model_name[T.OLMo-2-1124-7B-Instruct]:language[pt]      0.0832      0.020      4.203      0.000       0.044       0.122
+us[T.True]:model_name[T.gemma-2-27b-it]:language[pt]               0.1303      0.020      6.581      0.000       0.091       0.169
+us[T.True]:model_name[T.gemma-2-2b-it]:language[pt]                0.1018      0.020      5.141      0.000       0.063       0.141
+us[T.True]:model_name[T.gemma-2-9b-it]:language[pt]                0.1115      0.020      5.634      0.000       0.073       0.150
+us[T.True]:model_name[T.gpt-3.5-turbo-0125]:language[pt]           0.1359      0.020      6.864      0.000       0.097       0.175
+us[T.True]:model_name[T.gpt-4-turbo-2024-04-09]:language[pt]       0.1012      0.020      5.114      0.000       0.062       0.140
+us[T.True]:model_name[T.gpt-4o]:language[pt]                       0.1063      0.020      5.368      0.000       0.067       0.145
+==============================================================================
+Omnibus:                     2074.776   Durbin-Watson:                   1.989
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             3188.164
+Skew:                          -0.931   Prob(JB):                         0.00
+Kurtosis:                       4.145   Cond. No.                         94.8
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.

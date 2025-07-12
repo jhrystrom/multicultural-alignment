@@ -1,0 +1,29 @@
+                           Mixed Linear Model Regression Results
+===========================================================================================
+Model:                        MixedLM             Dependent Variable:             alignment
+No. Observations:             3600                Method:                         REML     
+No. Groups:                   9                   Scale:                          0.0032   
+Min. group size:              400                 Log-Likelihood:                 5133.9285
+Max. group size:              400                 Converged:                      Yes      
+Mean group size:              400.0                                                        
+-------------------------------------------------------------------------------------------
+                                                 Coef.  Std.Err.   z    P>|z| [0.025 0.975]
+-------------------------------------------------------------------------------------------
+consistency:language[Danish]                      0.494    0.027 18.062 0.000  0.440  0.547
+consistency:language[Dutch]                       0.405    0.022 18.522 0.000  0.362  0.447
+consistency:language[English]                     0.723    0.037 19.326 0.000  0.650  0.797
+consistency:language[Portuguese]                  0.702    0.041 17.207 0.000  0.622  0.782
+multilingual:family[gemma]:language[Danish]       1.044    0.054 19.171 0.000  0.937  1.151
+multilingual:family[olmo]:language[Danish]        0.439    0.065  6.773 0.000  0.312  0.566
+multilingual:family[openai]:language[Danish]      0.053    0.083  0.641 0.522 -0.109  0.215
+multilingual:family[gemma]:language[Dutch]        1.010    0.065 15.521 0.000  0.882  1.137
+multilingual:family[olmo]:language[Dutch]         0.288    0.055  5.268 0.000  0.181  0.395
+multilingual:family[openai]:language[Dutch]       0.049    0.091  0.541 0.589 -0.130  0.228
+multilingual:family[gemma]:language[English]      0.561    0.064  8.753 0.000  0.435  0.686
+multilingual:family[olmo]:language[English]       0.068    0.043  1.575 0.115 -0.017  0.152
+multilingual:family[openai]:language[English]    -0.240    0.092 -2.606 0.009 -0.420 -0.059
+multilingual:family[gemma]:language[Portuguese]   0.593    0.086  6.923 0.000  0.425  0.761
+multilingual:family[olmo]:language[Portuguese]    0.008    0.036  0.221 0.825 -0.063  0.079
+multilingual:family[openai]:language[Portuguese] -0.296    0.079 -3.755 0.000 -0.450 -0.141
+model_name Var                                    0.060    0.558                           
+===========================================================================================
