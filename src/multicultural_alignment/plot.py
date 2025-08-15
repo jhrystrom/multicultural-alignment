@@ -20,6 +20,10 @@ def get_model_color_dict() -> dict[str, tuple]:
     return {model: color for family_palette in color_palettes.values() for model, color in family_palette.items()}
 
 
+def rename_color_dict(new_names: dict[str, str], color_dict: dict[str, tuple]) -> dict[str, tuple]:
+    return {new_names.get(model, model): color for model, color in color_dict.items()}
+
+
 def _last_value(dictionary: dict) -> tuple:
     return list(dictionary.values())[-1]
 

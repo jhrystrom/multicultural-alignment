@@ -2,10 +2,11 @@ import json
 from pathlib import Path
 
 import pandas as pd
+import polars as pl
 
 import multicultural_alignment.score as score
 from multicultural_alignment import fileio
-from multicultural_alignment.constants import OUTPUT_DIR
+from multicultural_alignment.constants import DATA_DIR, OUTPUT_DIR
 from multicultural_alignment.data import get_family_data, get_family_string
 from multicultural_alignment.models import MODEL_FAMILIES, get_model_family, get_model_name
 from multicultural_alignment.schemas import AnalysisResponse
@@ -95,7 +96,7 @@ def get_data_pipeline():
 
     # full_df = pd.concat([full_openai_mistral, full_gpt4o, full_gemma], ignore_index=True).reset_index(drop=True)
     # assert full_df.loc[0, "model"].startswith("gpt-4-turbo"), "Model name does not start with gpt-4-turbo"
-    full_df.to_csv("data/lang_model_responses_raw.csv", index=False)
+    full_df.to_csv(DATA_DIR / "lang_model_responses_raw.csv", index=False)
 
     ground_truth = pd.read_csv(OUTPUT_DIR / "ground_truth.csv").rename(columns={"pro_score": "ground_truth_pro_score"})
     all_results = (
@@ -106,7 +107,7 @@ def get_data_pipeline():
     all_results = all_results.assign(
         model_family=all_results["model"].apply(get_model_family), model_name=all_results["model"].apply(get_model_name)
     )
-    all_results["model_name"].unique()
+    pl.from_pandas(all_results).write_parquet(DATA_DIR / "lang_model_responses_with_scores.parquet")
 
     columns_to_save = [
         "model_name",
