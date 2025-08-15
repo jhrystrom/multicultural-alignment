@@ -3,7 +3,7 @@
 [![Arxiv](https://img.shields.io/badge/cs.CL-2502.16534-b31b1b?logo=arxiv&logoColor=red)](https://doi.org/10.48550/arXiv.2502.16534)
 
 This is the code for the paper [Multilingual != Multicultural: Evaluating Gaps Between Multilingual Capabilities and Cultural Alignment in LLMs
-](https://arxiv.org/abs/2502.16534)
+](https://arxiv.org/abs/2502.16534).
 
 ## Installation 
 The project is pip-installable. To install, run the following command in the root directory of the project:
@@ -15,7 +15,7 @@ pip install -e .
 For a faster experience, we recommend using [uv](https://github.com/astral-sh/uv), which is an extremely fast drop-in replacement for `pip`.
 
 ### VLLM setup
-For running non-API models (i.e., `gemma`), we use the `vllm` library. As described in their [docs](https://docs.vllm.ai/en/stable/getting_started/installation.html), they recommend using uv or conda. Since we are already using conda, you can install vllm using uv: 
+For running non-API LLMs (i.e., `gemma` and `olmo` LLMs), we use the `vllm` library. As described in their [docs](https://docs.vllm.ai/en/stable/getting_started/installation.html), they recommend using uv or conda. Since we are already using conda, you can install vllm using uv: 
 
 ```bash
 uv sync --group=cuda
