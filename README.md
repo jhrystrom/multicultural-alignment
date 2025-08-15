@@ -1,5 +1,9 @@
 # multicultural-alignment
+[![Hugging Face Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-blue)](https://huggingface.co/datasets/ryzzlestrizzle/multicultural-wvs-alignment)
+[![Arxiv](https://img.shields.io/badge/cs.CL-2502.16534-b31b1b?logo=arxiv&logoColor=red)](https://doi.org/10.48550/arXiv.2502.16534)
 
+This is the code for the paper [Multilingual != Multicultural: Evaluating Gaps Between Multilingual Capabilities and Cultural Alignment in LLMs
+](https://arxiv.org/abs/2502.16534)
 
 ## Installation 
 The project is pip-installable. To install, run the following command in the root directory of the project:
@@ -24,6 +28,8 @@ This will add `vllm` to the virtual environment. To get responses for the open-s
 python scripts/vllm_batch_responses.py
 ```
 
+## Data
+We release our dataset on huggingface 🤗 (see top of readme for link). This includes a detailed datasheet ([Gebru et al., 2021](https://dl.acm.org/doi/10.1145/3458723)).
 
 
 ## Reproducing the analysis
