@@ -3,8 +3,8 @@
 Dep. Variable:           metric_value   R-squared:                       0.685
 Model:                            OLS   Adj. R-squared:                  0.684
 Method:                 Least Squares   F-statistic:                     438.9
-Date:                Sat, 12 Jul 2025   Prob (F-statistic):               0.00
-Time:                        11:24:16   Log-Likelihood:                 12042.
+Date:                Mon, 25 Aug 2025   Prob (F-statistic):               0.00
+Time:                        12:03:20   Log-Likelihood:                 12042.
 No. Observations:               16000   AIC:                        -2.392e+04
 Df Residuals:                   15920   BIC:                        -2.331e+04
 Df Model:                          79                                         
@@ -93,7 +93,7 @@ us[T.True]:model_name[T.gpt-3.5-turbo-0125]:language[pt]           0.1359      0
 us[T.True]:model_name[T.gpt-4-turbo-2024-04-09]:language[pt]       0.1012      0.020      5.114      0.000       0.062       0.140
 us[T.True]:model_name[T.gpt-4o]:language[pt]                       0.1063      0.020      5.368      0.000       0.067       0.145
 ==============================================================================
-Omnibus:                     2074.776   Durbin-Watson:                   1.989
+Omnibus:                     2074.776   Durbin-Watson:                   1.986
 Prob(Omnibus):                  0.000   Jarque-Bera (JB):             3188.164
 Skew:                          -0.931   Prob(JB):                         0.00
 Kurtosis:                       4.145   Cond. No.                         94.8

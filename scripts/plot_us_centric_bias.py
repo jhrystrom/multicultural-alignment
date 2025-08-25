@@ -1,3 +1,5 @@
+import argparse
+
 import matplotlib.pyplot as plt
 import polars as pl
 import seaborn as sns
@@ -97,7 +99,7 @@ def get_confidence_data(significant: pl.DataFrame) -> pl.DataFrame:
 
 def plot_us_centric_bias(plot_data: pl.DataFrame) -> None:
     plt.figure(figsize=(12, 6))
-    sns.barplot(
+    plot = sns.barplot(
         data=plot_data.sort("model_name").cast({"model_name": str}).with_columns(pl.col("language").replace(LANGUAGE_MAP)),
         x="language",
         y="coefficient",
@@ -105,15 +107,17 @@ def plot_us_centric_bias(plot_data: pl.DataFrame) -> None:
         palette=get_model_color_dict(),
         errorbar=("pi", 100),
     )
-    plt.ylabel("$\\beta_{BiasUS}$")
-    plt.xlabel(None)
-    # legend below plot in two columns
+    font_size = 27
+    plot.set_ylabel("$\\beta_{BiasUS}$", fontsize=font_size)
+    plot.set_xlabel(None)
+    plot.set_xticklabels(plot.get_xticklabels(), fontsize=font_size - 2)
+
     plt.legend(ncol=3, loc="lower center", bbox_to_anchor=(0.45, -0.43))
     plt.savefig(PLOT_DIR / "us_bias_coefficients.png", bbox_inches="tight")
 
 
-def main():
-    sns.set_theme(style="whitegrid", font_scale=1.7)
+def main(font_scale: float = 1.7):
+    sns.set_theme(style="whitegrid", font_scale=font_scale)
     logger.info("Running US-centric bias regression")
     us_results = run_us_regression()
     save_regression_results(us_results, regression_type="normal", rq_method="us_centric_bias")
@@ -123,4 +127,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--scale", type=float, default=1.7, help="Font scale for the plot")
+    args = parser.parse_args()
+    main(font_scale=args.scale)
