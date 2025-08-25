@@ -53,7 +53,7 @@ def plot_language_correlations(wvs_language_data: pl.DataFrame):
     plt.savefig(PLOT_DIR / "wvs_language_correlations.png", bbox_inches="tight")
 
 
-def plot_country_correlations(wvs_data: pl.DataFrame, font_size: int = 15):
+def plot_country_correlations(wvs_data: pl.DataFrame, font_size: int = 15, annotate: bool = True):
     pivoted = wvs_data.pivot(index="question_key", on="cntry_an", values="pro_score", sort_columns=True)
     corr_matrix = pivoted.to_pandas().corr(numeric_only=True, min_periods=1)
     # Create a mask for the upper triangle
@@ -65,13 +65,13 @@ def plot_country_correlations(wvs_data: pl.DataFrame, font_size: int = 15):
     heatmap = sns.heatmap(
         corr_matrix,
         mask=mask,
-        annot=annot_labels,
+        annot=annot_labels if annotate else False,
         cmap="coolwarm",
         vmin=-1,
         vmax=1,
         center=0,
         square=True,
-        linewidths=0.5,
+        linewidths=0.75,
         fmt="",
         cbar_kws={"shrink": 1},
     )
