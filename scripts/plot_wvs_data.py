@@ -1,3 +1,5 @@
+import argparse
+
 import matplotlib.pyplot as plt
 import numpy as np
 import polars as pl
@@ -6,8 +8,17 @@ import seaborn as sns
 from multicultural_alignment.constants import COUNTRY_MAP, OUTPUT_DIR, PLOT_DIR
 
 
-def main() -> None:
-    sns.set_theme(font_scale=1.6, style="white")
+def _remove_leading_zero(val: float) -> str:
+    formatted = f"{val:.2f}"
+    if formatted.startswith("0."):
+        return formatted[1:]
+    elif formatted.startswith("-0."):
+        return "-" + formatted[2:]
+    return formatted
+
+
+def main(label_size: int = 15, font_scale: float = 1.8) -> None:
+    sns.set_theme(font_scale=font_scale, style="white")
     wvs_data_country = pl.read_csv(OUTPUT_DIR / "ground_truth_every_country.csv").rename({"lnge_iso": "language"})
     wvs_data_global = pl.read_csv(OUTPUT_DIR / "ground_truth_global.csv").with_columns(
         pl.lit("global").alias("cntry_an"), pl.lit("global").alias("language")
@@ -17,7 +28,7 @@ def main() -> None:
     )
     wvs_language_data = pl.read_csv(OUTPUT_DIR / "ground_truth_per_language.csv")
 
-    plot_country_correlations(wvs_data)
+    plot_country_correlations(wvs_data, font_size=label_size)
     plot_country_distributions(wvs_data)
     plot_language_correlations(wvs_language_data)
 
@@ -28,7 +39,7 @@ def plot_language_correlations(wvs_language_data: pl.DataFrame):
     plt.figure(figsize=(12, 10))
     sns.heatmap(
         corr_matrix,
-        annot=True,
+        annot=False,
         cmap="coolwarm",
         vmin=-1,
         vmax=1,
@@ -42,25 +53,30 @@ def plot_language_correlations(wvs_language_data: pl.DataFrame):
     plt.savefig(PLOT_DIR / "wvs_language_correlations.png", bbox_inches="tight")
 
 
-def plot_country_correlations(wvs_data: pl.DataFrame):
-    pivoted = wvs_data.pivot(index="question_key", on="cntry_an", values="pro_score")
+def plot_country_correlations(wvs_data: pl.DataFrame, font_size: int = 15):
+    pivoted = wvs_data.pivot(index="question_key", on="cntry_an", values="pro_score", sort_columns=True)
     corr_matrix = pivoted.to_pandas().corr(numeric_only=True, min_periods=1)
     # Create a mask for the upper triangle
     mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
     # Create a heatmap
     plt.figure(figsize=(12, 10))
-    sns.heatmap(
+    annot_labels = np.vectorize(_remove_leading_zero)(corr_matrix)
+
+    heatmap = sns.heatmap(
         corr_matrix,
         mask=mask,
-        annot=True,
+        annot=annot_labels,
         cmap="coolwarm",
         vmin=-1,
         vmax=1,
         center=0,
         square=True,
         linewidths=0.5,
-        cbar_kws={"shrink": 0.5},
+        fmt="",
+        cbar_kws={"shrink": 1},
     )
+    heatmap.set_xticklabels(heatmap.get_xmajorticklabels(), fontsize=font_size)
+    heatmap.set_yticklabels(heatmap.get_ymajorticklabels(), fontsize=font_size)
     plt.tight_layout()
     plt.savefig(PLOT_DIR / "country_correlations.png", bbox_inches="tight")
     # clear the plot
@@ -74,4 +90,9 @@ def plot_country_distributions(wvs_data) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--label_size", type=int, default=15)
+    parser.add_argument("--font_scale", type=float, default=1.8)
+
+    args = parser.parse_args()
+    main(label_size=args.label_size, font_scale=args.font_scale)
