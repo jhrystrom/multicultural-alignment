@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 import seaborn as sns
 
+from multicultural_alignment.constants import CLEAN_MODEL_NAMES
 from multicultural_alignment.models import MODEL_FAMILIES
 
 
@@ -22,6 +23,10 @@ def get_model_color_dict() -> dict[str, tuple]:
 
 def rename_color_dict(new_names: dict[str, str], color_dict: dict[str, tuple]) -> dict[str, tuple]:
     return {new_names.get(model, model): color for model, color in color_dict.items()}
+
+
+def get_renamed_colours():
+    return rename_color_dict(color_dict=get_model_color_dict(), new_names=CLEAN_MODEL_NAMES)
 
 
 def _last_value(dictionary: dict) -> tuple:

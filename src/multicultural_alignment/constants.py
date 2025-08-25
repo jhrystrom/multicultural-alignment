@@ -51,3 +51,16 @@ COUNTRY_MAP = {
     "DK": "Denmark",
     "SG": "Singapore",
 }
+
+
+CLEAN_MODEL_NAMES = {
+    "gpt-3.5-turbo-0125": "GPT-3.5 Turbo",
+    "gpt-4-turbo-2024-04-09": "GPT-4 Turbo",
+    "gpt-4o": "GPT-4o",
+    "gemma-2-2b-it": "Gemma-2 2B",
+    "gemma-2-9b-it": "Gemma-2 9B",
+    "gemma-2-27b-it": "Gemma-2 27B",
+    "OLMo-2-1124-7B-Instruct": "OLMo-2 7B",
+    "OLMo-2-1124-13B-Instruct": "OLMo-2 13B",
+    "OLMo-2-0325-32B-Instruct": "OLMo-2 32B",
+}

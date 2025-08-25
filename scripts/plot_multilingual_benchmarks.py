@@ -10,7 +10,7 @@ from loguru import logger
 from statsmodels.regression.linear_model import RegressionResults
 from tqdm import tqdm
 
-from multicultural_alignment.constants import COUNTRY_LANG_MAP, LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
+from multicultural_alignment.constants import CLEAN_MODEL_NAMES, COUNTRY_LANG_MAP, LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
 from multicultural_alignment.models import add_families_df, get_model_enum
 from multicultural_alignment.plot import get_family_color_dict, get_model_color_dict, rename_color_dict
 from multicultural_alignment.regression import extract_results_df, extract_term, save_regression_results
@@ -37,20 +37,10 @@ MODEL_NAME_MAPPING = {
     "OLMo-2 13B": "OLMo-2-1124-13B-Instruct",
     "OLMo-2 32B": "OLMo-2-0325-32B-Instruct",
 }
+
 ADJUSTMENT_FORMULAS = {
     "interaction": "alignment ~ 0 + consistency:language + language:model_name",
     "normal": "alignment ~ 0 + consistency + language:model_name",
-}
-CLEAN_MODEL_NAMES = {
-    "gpt-3.5-turbo-0125": "GPT-3.5 Turbo",
-    "gpt-4-turbo-2024-04-09": "GPT-4 Turbo",
-    "gpt-4o": "GPT-4o",
-    "gemma-2-2b-it": "Gemma-2 2B",
-    "gemma-2-9b-it": "Gemma-2 9B",
-    "gemma-2-27b-it": "Gemma-2 27B",
-    "OLMo-2-1124-7B-Instruct": "OLMo-2 7B",
-    "OLMo-2-1124-13B-Instruct": "OLMo-2 13B",
-    "OLMo-2-0325-32B-Instruct": "OLMo-2 32B",
 }
 
 

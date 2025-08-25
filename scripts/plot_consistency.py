@@ -1,12 +1,14 @@
+import argparse
+
 import matplotlib.pyplot as plt
 import polars as pl
 import seaborn as sns
 from tqdm import tqdm
 
-from multicultural_alignment.constants import LANGUAGE_MAP, PLOT_DIR
+from multicultural_alignment.constants import CLEAN_MODEL_NAMES, LANGUAGE_MAP, PLOT_DIR
 from multicultural_alignment.data import load_results
 from multicultural_alignment.models import get_model_enum
-from multicultural_alignment.plot import get_model_color_dict
+from multicultural_alignment.plot import get_renamed_colours
 
 
 def calculate_language_self_correlations(
@@ -44,7 +46,11 @@ def simplified_create_consistency(correlation_dicts: list[dict[str, pl.DataFrame
 
 
 if __name__ == "__main__":
-    sns.set_theme(font_scale=1.7, style="whitegrid")
+    parser = argparse.ArgumentParser(description="Plot model self-consistency.")
+    parser.add_argument("--scale", type=float, default=1.7)
+    args = parser.parse_args()
+
+    sns.set_theme(font_scale=args.scale, style="whitegrid")
     # 3x3 grid for the plot
     raw_responses = load_results(as_polars=True).filter(pl.col("template_type") == "survey_hypothetical")
     filtered_results = raw_responses.filter(pl.col("model_family") != "mistral").cast({"model_name": get_model_enum()})
@@ -61,12 +67,23 @@ if __name__ == "__main__":
         correlations_dicts.append(correlation_dict)
 
     consistency_df = simplified_create_consistency(correlation_dicts=correlations_dicts).with_columns(
-        pl.col("language").replace(LANGUAGE_MAP)
+        pl.col("language").replace(LANGUAGE_MAP),
+        pl.col("model").replace(CLEAN_MODEL_NAMES),
     )
 
-    sns.barplot(
-        data=consistency_df.to_pandas(), x="language", y="self-consistency", hue="model", palette=get_model_color_dict()
+    plt.figure(figsize=(10, 5))
+    color_dict = get_renamed_colours()
+    plot = sns.barplot(
+        data=consistency_df.sort("language"),
+        x="language",
+        y="self-consistency",
+        hue="model",
+        palette=color_dict,
     )
+    font_size = 30
+    plot.set_ylabel("self-consistency", fontsize=font_size)
+    plot.set_xlabel(None)
+    plot.set_xticklabels(plot.get_xticklabels(), fontsize=font_size - 2)
     # move legend below and 1 row
     plt.axhline(y=0.66, color="black", linestyle=":", alpha=0.9, label="country minimum")
     plt.axhline(y=0.84, color="black", linestyle="--", alpha=0.9, label="country maximum")
