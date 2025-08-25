@@ -7,9 +7,9 @@ import statsmodels.formula.api as smf
 from loguru import logger
 from statsmodels.regression.linear_model import RegressionResults
 
-from multicultural_alignment.constants import LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
+from multicultural_alignment.constants import CLEAN_MODEL_NAMES, LANGUAGE_MAP, OUTPUT_DIR, PLOT_DIR
 from multicultural_alignment.models import add_families_df
-from multicultural_alignment.plot import get_model_color_dict
+from multicultural_alignment.plot import get_renamed_colours
 from multicultural_alignment.regression import save_regression_results
 
 language_pattern = r"language\[([^\]]+)\]"
@@ -97,17 +97,18 @@ def get_confidence_data(significant: pl.DataFrame) -> pl.DataFrame:
     return pl.concat([significant_lower, significant_higher, significant_mid])
 
 
-def plot_us_centric_bias(plot_data: pl.DataFrame) -> None:
+def plot_us_centric_bias(plot_data: pl.DataFrame, font_size: int = 27) -> None:
     plt.figure(figsize=(12, 6))
     plot = sns.barplot(
-        data=plot_data.sort("model_name").cast({"model_name": str}).with_columns(pl.col("language").replace(LANGUAGE_MAP)),
+        data=plot_data.sort("model_name")
+        .cast({"model_name": str})
+        .with_columns(pl.col("language").replace(LANGUAGE_MAP), pl.col("model_name").replace(CLEAN_MODEL_NAMES)),
         x="language",
         y="coefficient",
         hue="model_name",
-        palette=get_model_color_dict(),
+        palette=get_renamed_colours(),
         errorbar=("pi", 100),
     )
-    font_size = 27
     plot.set_ylabel("$\\beta_{BiasUS}$", fontsize=font_size)
     plot.set_xlabel(None)
     plot.set_xticklabels(plot.get_xticklabels(), fontsize=font_size - 2)
@@ -116,18 +117,19 @@ def plot_us_centric_bias(plot_data: pl.DataFrame) -> None:
     plt.savefig(PLOT_DIR / "us_bias_coefficients.png", bbox_inches="tight")
 
 
-def main(font_scale: float = 1.7):
+def main(font_scale: float = 1.7, font_size: int = 27):
     sns.set_theme(style="whitegrid", font_scale=font_scale)
     logger.info("Running US-centric bias regression")
     us_results = run_us_regression()
     save_regression_results(us_results, regression_type="normal", rq_method="us_centric_bias")
     logger.info(f"Regression table:\n{us_results.summary()}")
     plot_data = get_confidence_data(get_coefficients(us_results))
-    plot_us_centric_bias(plot_data)
+    plot_us_centric_bias(plot_data, font_size=font_size)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--scale", type=float, default=1.7, help="Font scale for the plot")
+    parser.add_argument("--size", type=int, default=27, help="Font size for the plot")
     args = parser.parse_args()
-    main(font_scale=args.scale)
+    main(font_scale=args.scale, font_size=args.size)
