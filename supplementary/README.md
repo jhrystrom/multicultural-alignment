@@ -5,7 +5,7 @@ These are the supplementary materials for the paper [Multilingual != Multicultur
 
 ## Extended Methodology
 
-### Model Descriptions
+### LLM Descriptions
 Detailed specifications for Gemma, OpenAI turbo, and OLMo model families.
 - **File:** [`llm_descriptions.md`](llm_descriptions.md)
 

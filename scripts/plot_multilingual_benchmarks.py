@@ -242,7 +242,7 @@ def plot_multilingual_coefficients(regression_data: pl.DataFrame, regression_typ
                 multilingual_results_df.select(["language", "family", "coefficient"]),
             ]
         ).with_columns(pl.col("language").replace(LANGUAGE_MAP))
-        sns.barplot(
+        g = sns.barplot(
             data=plot_coefficients_combined,
             x="language",
             y="coefficient",
@@ -252,7 +252,9 @@ def plot_multilingual_coefficients(regression_data: pl.DataFrame, regression_typ
         )
         plt.ylabel("$\\beta_{multilingual}$")
         plt.xlabel(None)
-        plt.legend(title=None)
+        # Legend should be one row in the bottom
+        g.legend(loc="upper center", bbox_to_anchor=(0.43, -0.1), ncol=3, title=None)
+
         plt.savefig(PLOT_DIR / f"multilingual_coefficients_{name}.png", bbox_inches="tight")
         plt.close()
         all_multilingual_results_df.append(
@@ -275,14 +277,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "--font-scale",
         type=float,
-        default=1.6,
-        help="Scale of the font in the plots",
+        default=1.5,
+        help="Scale of the font in the plots (default used in paper)",
+    )
+    parser.add_argument(
+        "--scatter-factor", type=float, default=1.275, help="How much larger to make scatter font (default used in paper)"
     )
     args = parser.parse_args()
     regression_type = args.regression_type
     font_scale = args.font_scale
-    sns.set_theme(font_scale=font_scale, style="whitegrid")
+    scatter_factor = args.scatter_factor
 
+    sns.set_theme(font_scale=font_scale * 1.2, style="whitegrid")
     benchmarks = get_benchmark_data()
     experiment_data = get_experiment_data()
     regression_data = get_language_regression_data(benchmarks=benchmarks, experiment_data=experiment_data)
@@ -299,6 +305,8 @@ if __name__ == "__main__":
     ).with_columns(
         pl.col("model_name").replace(CLEAN_MODEL_NAMES),
     )
+    # The second figure needs larger fonts
+    sns.set_theme(font_scale=font_scale * scatter_factor, style="whitegrid")
 
     color_dict = rename_color_dict(color_dict=get_model_color_dict(), new_names=CLEAN_MODEL_NAMES)
     plot = sns.relplot(
@@ -343,11 +351,15 @@ if __name__ == "__main__":
                 y_mid = slope * x_mid + intercept
                 # Add star slightly above the middle point
                 offset = (ax.get_ylim()[1] - ax.get_ylim()[0]) * 0.05
-                ax.text(x_mid, y_mid - offset, "*", ha="center", va="bottom", color=family_colours[family], fontsize=40)
+                ax.text(x_mid, y_mid - offset, "*", ha="center", va="bottom", color="black", fontsize=40)
 
     sns.move_legend(plot, "upper center", bbox_to_anchor=(0.41, -0.0), ncol=3, title=None, markerscale=2.0)
-    plot.set_titles(col_template="{col_name}")
+    plot.set_titles(col_template="{col_name}", size=25)
     plot.set_axis_labels("", "")
+    # y-ticks should run up to 0.8
+    for ax in plot.axes.flat:
+        ax.set_ylim(0, 0.9)
+
     plot.figure.supxlabel("Multilingual Capability")
     plot.figure.supylabel("Cultural Alignment", x=0.05)
     # Increase size of the dot marker in the legend
